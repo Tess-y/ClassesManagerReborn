@@ -36,18 +36,25 @@ namespace ClassesManagerReborn
         public static ConfigEntry<bool> Double_Odds;
 
 
+        internal MethodBase GetRelativeRarity;
+
+
         void Awake()
         {
-            DEBUG = base.Config.Bind<bool>(ModId, "Debug", true, "Enable to turn on concole spam from our mod");
+            DEBUG = base.Config.Bind<bool>(ModId, "Debug", false, "Enable to turn on concole spam from our mod");
 
 
             var harmony = new Harmony(ModId);
             harmony.PatchAll();
 
             //// Patch Deck Customization
-            MethodBase GetRelativeRarity = typeof(DeckCustomization.DeckCustomization).Assembly.GetType("DeckCustomization.RarityUtils").GetMethod("GetRelativeRarity", BindingFlags.NonPublic | BindingFlags.Static, null, new Type[] { typeof(CardInfo) },null);
+            GetRelativeRarity = typeof(DeckCustomization.DeckCustomization).Assembly.GetType("DeckCustomization.RarityUtils").GetMethod("GetRelativeRarity", BindingFlags.NonPublic | BindingFlags.Static, null, new Type[] { typeof(CardInfo) },null);
             HarmonyMethod GetRelativeRarity_Postfix = new HarmonyMethod(typeof(Patchs.GetRelativeRarity).GetMethod(nameof(Patchs.GetRelativeRarity.PostfixMthod)));
             harmony.Patch(GetRelativeRarity, postfix: GetRelativeRarity_Postfix);
+
+            MethodBase EfficientGetRandomCard = typeof(DeckCustomization.DeckCustomization).Assembly.GetType("DeckCustomization.GetRandomCard").GetMethod("Efficient", BindingFlags.NonPublic | BindingFlags.Static);
+            HarmonyMethod EfficientGetRandomCard_Prefix = new HarmonyMethod(typeof(Patchs.EfficientGetRandomCard).GetMethod(nameof(Patchs.EfficientGetRandomCard.PrefixMthod)));
+            harmony.Patch(EfficientGetRandomCard, prefix: EfficientGetRandomCard_Prefix);
             //// END patch
 
 
@@ -65,13 +72,16 @@ namespace ClassesManagerReborn
             Unbound.RegisterHandshake(ModId, this.OnHandShakeCompleted);
 
             Unbound.RegisterMenu(ModName, delegate () { }, new Action<GameObject>(this.NewGUI), null, true);
+
+
+            //instance.ExecuteAfterFrames(10, TestMode);
         }
 
         private void OnHandShakeCompleted()
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                NetworkingManager.RPC_Others(typeof(Main), nameof(SyncSettings), new object[] { Force_Class.Value, Ignore_Blacklist.Value, Ensure_Class_Card.Value, Class_War.Value });
+                NetworkingManager.RPC_Others(typeof(Main), nameof(SyncSettings), new object[] { Force_Class.Value, Ignore_Blacklist.Value, Ensure_Class_Card.Value, Class_War.Value, Double_Odds.Value });
             }
         }
 
@@ -101,12 +111,60 @@ namespace ClassesManagerReborn
         }
 
 
-        public static void Debug(object message)
+        public static void Debug(object message, bool important = false)
         {
-            if (DEBUG.Value)
+            if (DEBUG.Value || important)
             {
                 UnityEngine.Debug.Log($"{ModInitials}=>{message}");
             }
+        }
+
+
+        private static void TestMode()
+        {
+            ModdingUtils.Utils.Cards cards = ModdingUtils.Utils.Cards.instance;
+
+            ClassesRegistry.Regester(cards.GetCardWithName("DEFENDER"), CardType.Entry);
+            ClassesRegistry.Regester(cards.GetCardWithName("ECHO"), CardType.Card, cards.GetCardWithName("DEFENDER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("FROST SLAM"), CardType.Card, cards.GetCardWithName("DEFENDER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("Healing field"), CardType.Card, cards.GetCardWithName("DEFENDER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("SHIELDS UP"), CardType.Card, cards.GetCardWithName("DEFENDER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("SHIELD CHARGE"), CardType.Card, cards.GetCardWithName("DEFENDER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("STATIC FIELD"), CardType.Card, cards.GetCardWithName("DEFENDER"));
+
+            ClassesRegistry.Regester(cards.GetCardWithName("BOUNCY"), CardType.Entry);
+            ClassesRegistry.Regester(cards.GetCardWithName("TRICKSTER"), CardType.Card, cards.GetCardWithName("BOUNCY"));
+            ClassesRegistry.Regester(cards.GetCardWithName("RICCOCHET"), CardType.Card, cards.GetCardWithName("BOUNCY"));
+            ClassesRegistry.Regester(cards.GetCardWithName("MAYHEM"), CardType.Card, cards.GetCardWithName("BOUNCY"));
+            ClassesRegistry.Regester(cards.GetCardWithName("Target BOUNCE"), CardType.Card, cards.GetCardWithName("BOUNCY"));
+
+            ClassesRegistry.Regester(cards.GetCardWithName("BRAWLER"), CardType.Entry);
+            ClassesRegistry.Regester(cards.GetCardWithName("Refresh"), CardType.Card, cards.GetCardWithName("BRAWLER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("SCAVENGER"), CardType.Card, cards.GetCardWithName("BRAWLER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("CHASE"), CardType.Card, cards.GetCardWithName("BRAWLER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("DECAY"), CardType.Card, cards.GetCardWithName("BRAWLER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("RADIANCE"), CardType.Card, cards.GetCardWithName("BRAWLER"));
+
+            ClassesRegistry.Regester(cards.GetCardWithName("LIFESTEALER"), CardType.Entry);
+            ClassesRegistry.Regester(cards.GetCardWithName("PARASITE"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("LEECH"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("POISON"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("DAZZLE"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("TASTE OF BLOOD"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
+
+            ClassesRegistry.Regester(cards.GetCardWithName("Demonic pact"), CardType.Entry);
+            ClassesRegistry.Regester(cards.GetCardWithName("TOXIC CLOUD"), CardType.Card, cards.GetCardWithName("Demonic pact"));
+            ClassesRegistry.Regester(cards.GetCardWithName("SILENCE"), CardType.Card, cards.GetCardWithName("Demonic pact"));
+            ClassesRegistry.Regester(cards.GetCardWithName("ABYSSAL COUNTDOWN"), CardType.Card, cards.GetCardWithName("Demonic pact"));
+            ClassesRegistry.Regester(cards.GetCardWithName("GROW"), CardType.Card, cards.GetCardWithName("Demonic pact"));
+            ClassesRegistry.Regester(cards.GetCardWithName("PHOENIX"), CardType.Card, cards.GetCardWithName("Demonic pact"));
+
+            ClassesRegistry.Regester(cards.GetCardWithName("EMPOWER"), CardType.Entry);
+            ClassesRegistry.Regester(cards.GetCardWithName("EMP"), CardType.Card, cards.GetCardWithName("EMPOWER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("REMOTE"), CardType.Card, cards.GetCardWithName("EMPOWER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("SNEAKY"), CardType.Card, cards.GetCardWithName("EMPOWER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("THRUSTER"), CardType.Card, cards.GetCardWithName("EMPOWER"));
+            ClassesRegistry.Regester(cards.GetCardWithName("HOMING"), CardType.Card, cards.GetCardWithName("EMPOWER"));
         }
 
     }

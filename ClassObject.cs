@@ -8,7 +8,7 @@ namespace ClassesManagerReborn
     public class ClassObject
     {
         public CardInfo card;
-        public CardType type;
+        public CardType type { internal set; get; }
         public CardInfo[][] RequiredClassesTree;
         private bool noBlacklist = false;
         private List<CardInfo> whiteList = new List<CardInfo>();
@@ -48,7 +48,7 @@ namespace ClassesManagerReborn
             {
                 foreach(Player p in PlayerManager.instance.players)
                 {
-                    if (p != player && player.data.currentCards.Contains(card)) return false;
+                    if (p != player && p.data.currentCards.Contains(card)) return false;
                 }
             }
             if (!Main.Ignore_Blacklist.Value && !noBlacklist && ((CardType.Entry | CardType.SubClass) & type) != 0)

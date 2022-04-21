@@ -8,6 +8,7 @@ namespace ClassesManagerReborn
     public static class ClassesRegistry
     {
         internal static Dictionary<CardInfo, ClassObject> Registry = new Dictionary<CardInfo, ClassObject>();
+        internal static List<CardInfo> ClassInfos = new List<CardInfo>();
 
         public static ClassObject Regester(CardInfo card, CardType type)
         {
@@ -33,6 +34,7 @@ namespace ClassesManagerReborn
             }
             ClassObject classObject = new ClassObject(card, type, RequiredClassesTree);
             Registry.Add(card, classObject);
+            if(type == CardType.Entry) ClassInfos.Add(card);
             if (card.allowMultiple)
                 classObject.Whitelist(card);
             return classObject;
