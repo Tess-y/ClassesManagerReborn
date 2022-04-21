@@ -76,5 +76,28 @@ namespace ClassesManagerReborn
             return false;
         }
 
+
+        public static CardInfo[][] TecTreeHelper(CardInfo[] cards, int required_count)
+        {
+            List<CardInfo[]> ret = new List<CardInfo[]>();
+            List<int> counts = new List<int>(); for(int i = 0; i<required_count; i++) counts.Add(0);
+            while (counts[0] < cards.Length)
+            {
+                List<CardInfo> cardInfos = new List<CardInfo>();
+                foreach(int i in counts) cardInfos.Add(cards[i]);
+                ret.Add(cardInfos.ToArray());
+                counts[counts.Count - 1]++;
+                for (int i = counts.Count -1; i <= 0; i--)
+                {
+                    if (counts[i] == cards.Length && i!=0)
+                    {
+                        counts[i] = 0;
+                        counts[i-1]++;
+                    }
+                }
+            }
+            return ret.ToArray();
+        }
+
     }
 }
