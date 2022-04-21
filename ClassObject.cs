@@ -62,13 +62,14 @@ namespace ClassesManagerReborn
                     if (player.data.currentCards.Intersect(ClassesRegistry.GetClassInfos(type)).Any()) return false;
                 }
             }
+            if (type == CardType.Entry) return true;
             foreach(CardInfo[] RequiredClassTree in RequiredClassesTree)
             {
                 bool flag = true;
                 List<CardInfo> playerCards = player.data.currentCards.ToList();
                 foreach(CardInfo card in RequiredClassTree)
                 {
-                    if (playerCards.Contains(card){
+                    if (playerCards.Contains(card)){
                         playerCards.Remove(card);
                     }
                     else
