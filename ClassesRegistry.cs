@@ -33,6 +33,8 @@ namespace ClassesManagerReborn
             }
             ClassObject classObject = new ClassObject(card, type, RequiredClassesTree);
             Registry.Add(card, classObject);
+            if (card.allowMultiple)
+                classObject.Whitelist(card);
             return classObject;
         }
 
