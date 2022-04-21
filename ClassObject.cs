@@ -84,6 +84,35 @@ namespace ClassesManagerReborn
             return false;
         }
 
+        internal CardInfo? GetMissingClass(Player player)
+        {
+            List<CardInfo> cardInfos = new List<CardInfo>();
+            bool first = true;
+
+            foreach (CardInfo[] RequiredClassTree in RequiredClassesTree)
+            {
+                List<CardInfo> missing = new List<CardInfo>();
+                List<CardInfo> playerCards = player.data.currentCards.ToList();
+                foreach (CardInfo card in RequiredClassTree)
+                {
+                    if (playerCards.Contains(card))
+                    {
+                        playerCards.Remove(card);
+                    }
+                    else
+                    {
+                        missing.Add(card);
+                    }
+                }
+                if (first || cardInfos.Count > missing.Count)
+                {
+                    first = false;
+                    cardInfos = missing;
+                } 
+            }
+
+            return cardInfos.Any() ? cardInfos[0] : null;
+        }
 
         public static CardInfo[][] TecTreeHelper(CardInfo[] cards, int required_count)
         {
