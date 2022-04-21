@@ -15,7 +15,7 @@ namespace ClassesManagerReborn
             {
                 throw new ArgumentException("Non-entry cards require a requirment tree to resester");
             }
-            return Regester(card, type, new CardInfo[][] { });
+            return Regester(card, type, new CardInfo[] { });
         }
         public static ClassObject Regester(CardInfo card, CardType type, CardInfo RequiredClass)
         {

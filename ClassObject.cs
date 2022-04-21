@@ -44,7 +44,14 @@ namespace ClassesManagerReborn
 
         public bool PlayerIsAllowedCard(Player player)
         {
-            if (!noBlacklist && ((CardType.Entry | CardType.SubClass) & type) != 0)
+            if (Main.Class_War.Value && type == CardType.Entry)
+            {
+                foreach(Player p in PlayerManager.instance.players)
+                {
+                    if (p != player && player.data.currentCards.Contains(card)) return false;
+                }
+            }
+            if (!Main.Ignore_Blacklist.Value && !noBlacklist && ((CardType.Entry | CardType.SubClass) & type) != 0)
             {
                 if (whiteList.Any())
                 {
