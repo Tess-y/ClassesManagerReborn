@@ -15,12 +15,12 @@ namespace ClassesManagerReborn.Patchs
     {
         public static bool PrefixMthod(CardChoice cardChoice, ref GameObject __result)
         {
-            if (Main.Force_Class.Value)
+            if (ClassesManager.Force_Class.Value)
             {
                 // this is a more efficient version of the above method that gauruntees that cards drawn will be valid on the first try
                 Player player = PickingPlayer(cardChoice);
                 if (player == null || player.data.currentCards.Intersect(ClassesRegistry.ClassInfos).Any()) { return true; }
-                Main.Debug("Forcing Class");
+                ClassesManager.Debug("Forcing Class");
                 CardInfo[] validCards = ClassesRegistry.ClassInfos.Where(c => ModdingUtils.Utils.Cards.instance.PlayerIsAllowedCard(player, c) && GetRelativeRarity(c) > 0f).ToArray();
 
                 try
@@ -69,7 +69,7 @@ namespace ClassesManagerReborn.Patchs
 
         internal static float GetRelativeRarity(CardInfo card)
         {
-            return (float)Main.instance.GetRelativeRarity.Invoke(null,new object[] { card });
+            return (float)ClassesManager.instance.GetRelativeRarity.Invoke(null,new object[] { card });
         }
 
         internal static Player PickingPlayer(CardChoice cardChoice) //thefted from original

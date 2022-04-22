@@ -11,7 +11,7 @@ namespace ClassesManagerReborn.Patchs
     {
         public static void PostfixMthod(ref float __result, CardInfo card)
         {
-            if (Main.Double_Odds.Value)
+            if (ClassesManager.Double_Odds.Value)
             {
                 if(ClassesRegistry.Registry.ContainsKey(card) && ClassesRegistry.Registry[card].type != CardType.Entry)
                 {

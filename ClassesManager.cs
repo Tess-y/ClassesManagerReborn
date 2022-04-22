@@ -8,6 +8,10 @@ using UnboundLib.Utils.UI;
 using UnityEngine;
 using Photon.Pun;
 using System.Reflection;
+using System.Collections.Generic;
+using System.Linq;
+using UnboundLib.GameModes;
+using ClassesManagerReborn.Util;
 
 namespace ClassesManagerReborn
 {
@@ -20,13 +24,15 @@ namespace ClassesManagerReborn
     [BepInPlugin(ModId, ModName, Version)]
     // The game our Mod Is associated with
     [BepInProcess("Rounds.exe")]
-    public class Main : BaseUnityPlugin
+    public class ClassesManager : BaseUnityPlugin
     {
         private const string ModId = "root.classes.manager.reborn";
         private const string ModName = "Classes Manager Reborn";
         public const string Version = "0.0.0";
         public const string ModInitials = "CMR";
-        public static Main instance { get; private set; }
+
+        public const string End_Registration_Hook = "End_Registration_Hook";
+        public static ClassesManager instance { get; private set; }
 
         public static ConfigEntry<bool> DEBUG;
         public static ConfigEntry<bool> Force_Class;
@@ -38,6 +44,29 @@ namespace ClassesManagerReborn
 
         internal MethodBase GetRelativeRarity;
 
+        internal System.Collections.IEnumerator InstashateModClasses()
+        {
+            List<Task> tasks = new List<Task>();
+            PluginInfo[] pluginInfos = BepInEx.Bootstrap.Chainloader.PluginInfos.Values.Where(pi => pi.Dependencies.Any(d => d.DependencyGUID == ModId)).ToArray();
+            foreach (PluginInfo info in pluginInfos)
+            {
+                Assembly mod = Assembly.LoadFile(info.Location);
+                Debug(mod.FullName);
+                Type[] types = mod.GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(ClassHandler))).ToArray();
+                Debug(types.Length);
+                foreach (Type type in types)
+                {
+                    ClassHandler handler = (ClassHandler)Activator.CreateInstance(type);
+                    tasks.Add(new Task(handler.Init()));
+                    Debug("...");
+                }
+                
+            }
+            while (tasks.Any(t => t.Running)) yield return null;
+
+            Debug(End_Registration_Hook);
+            yield return GameModeManager.TriggerHook(End_Registration_Hook);
+        }
 
         void Awake()
         {
@@ -75,13 +104,14 @@ namespace ClassesManagerReborn
 
 
             //instance.ExecuteAfterFrames(10, TestMode);
+            instance.StartCoroutine(InstashateModClasses());
         }
 
         private void OnHandShakeCompleted()
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                NetworkingManager.RPC_Others(typeof(Main), nameof(SyncSettings), new object[] { Force_Class.Value, Ignore_Blacklist.Value, Ensure_Class_Card.Value, Class_War.Value, Double_Odds.Value });
+                NetworkingManager.RPC_Others(typeof(ClassesManager), nameof(SyncSettings), new object[] { Force_Class.Value, Ignore_Blacklist.Value, Ensure_Class_Card.Value, Class_War.Value, Double_Odds.Value });
             }
         }
 

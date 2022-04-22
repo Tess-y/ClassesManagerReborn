@@ -55,14 +55,14 @@ namespace ClassesManagerReborn
             {
                 return false;
             }
-            if (Main.Class_War.Value && type == CardType.Entry)
+            if (ClassesManager.Class_War.Value && type == CardType.Entry)
             {
                 foreach(Player p in PlayerManager.instance.players)
                 {
                     if (p.playerID != playerID && p.data.currentCards.Contains(card)) return false;
                 }
             }
-            if (!Main.Ignore_Blacklist.Value && !noBlacklist && ((CardType.Entry | CardType.SubClass) & type) != 0)
+            if (!ClassesManager.Ignore_Blacklist.Value && !noBlacklist && ((CardType.Entry | CardType.SubClass) & type) != 0)
             {
                 if (whiteList.Any())
                 {
