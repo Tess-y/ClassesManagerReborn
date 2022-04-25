@@ -28,7 +28,7 @@ namespace ClassesManagerReborn
     {
         private const string ModId = "root.classes.manager.reborn";
         private const string ModName = "Classes Manager Reborn";
-        public const string Version = "1.0.0";
+        public const string Version = "1.1.0";
         public const string ModInitials = "CMR";
 
         public static ClassesManager instance { get; private set; }
@@ -153,47 +153,47 @@ namespace ClassesManagerReborn
         {
             ModdingUtils.Utils.Cards cards = ModdingUtils.Utils.Cards.instance;
 
-            ClassesRegistry.Regester(cards.GetCardWithName("DEFENDER"), CardType.Entry);
-            ClassesRegistry.Regester(cards.GetCardWithName("ECHO"), CardType.Card, cards.GetCardWithName("DEFENDER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("FROST SLAM"), CardType.Card, cards.GetCardWithName("DEFENDER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("Healing field"), CardType.Card, cards.GetCardWithName("DEFENDER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("SHIELDS UP"), CardType.Card, cards.GetCardWithName("DEFENDER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("SHIELD CHARGE"), CardType.Card, cards.GetCardWithName("DEFENDER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("STATIC FIELD"), CardType.Card, cards.GetCardWithName("DEFENDER"));
+            ClassesRegistry.Register(cards.GetCardWithName("DEFENDER"), CardType.Entry);
+            ClassesRegistry.Register(cards.GetCardWithName("ECHO"), CardType.Card, cards.GetCardWithName("DEFENDER"));
+            ClassesRegistry.Register(cards.GetCardWithName("FROST SLAM"), CardType.Card, cards.GetCardWithName("DEFENDER"));
+            ClassesRegistry.Register(cards.GetCardWithName("Healing field"), CardType.Card, cards.GetCardWithName("DEFENDER"));
+            ClassesRegistry.Register(cards.GetCardWithName("SHIELDS UP"), CardType.Card, cards.GetCardWithName("DEFENDER"));
+            ClassesRegistry.Register(cards.GetCardWithName("SHIELD CHARGE"), CardType.Card, cards.GetCardWithName("DEFENDER"));
+            ClassesRegistry.Register(cards.GetCardWithName("STATIC FIELD"), CardType.Card, cards.GetCardWithName("DEFENDER"));
 
-            ClassesRegistry.Regester(cards.GetCardWithName("BOUNCY"), CardType.Entry);
-            ClassesRegistry.Regester(cards.GetCardWithName("TRICKSTER"), CardType.Card, cards.GetCardWithName("BOUNCY"));
-            ClassesRegistry.Regester(cards.GetCardWithName("RICCOCHET"), CardType.Card, cards.GetCardWithName("BOUNCY"));
-            ClassesRegistry.Regester(cards.GetCardWithName("MAYHEM"), CardType.Card, cards.GetCardWithName("BOUNCY"));
-            ClassesRegistry.Regester(cards.GetCardWithName("Target BOUNCE"), CardType.Card, cards.GetCardWithName("BOUNCY"));
+            ClassesRegistry.Register(cards.GetCardWithName("BOUNCY"), CardType.Entry);
+            ClassesRegistry.Register(cards.GetCardWithName("TRICKSTER"), CardType.Card, cards.GetCardWithName("BOUNCY"));
+            ClassesRegistry.Register(cards.GetCardWithName("RICCOCHET"), CardType.Card, cards.GetCardWithName("BOUNCY"));
+            ClassesRegistry.Register(cards.GetCardWithName("MAYHEM"), CardType.Card, cards.GetCardWithName("BOUNCY"));
+            ClassesRegistry.Register(cards.GetCardWithName("Target BOUNCE"), CardType.Card, cards.GetCardWithName("BOUNCY"));
 
-            ClassesRegistry.Regester(cards.GetCardWithName("BRAWLER"), CardType.Entry);
-            ClassesRegistry.Regester(cards.GetCardWithName("Refresh"), CardType.Card, cards.GetCardWithName("BRAWLER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("SCAVENGER"), CardType.Card, cards.GetCardWithName("BRAWLER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("CHASE"), CardType.Card, cards.GetCardWithName("BRAWLER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("DECAY"), CardType.Card, cards.GetCardWithName("BRAWLER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("RADIANCE"), CardType.Card, cards.GetCardWithName("BRAWLER"));
+            ClassesRegistry.Register(cards.GetCardWithName("BRAWLER"), CardType.Entry);
+            ClassesRegistry.Register(cards.GetCardWithName("Refresh"), CardType.Card, cards.GetCardWithName("BRAWLER"));
+            ClassesRegistry.Register(cards.GetCardWithName("SCAVENGER"), CardType.Card, cards.GetCardWithName("BRAWLER"));
+            ClassesRegistry.Register(cards.GetCardWithName("CHASE"), CardType.Card, cards.GetCardWithName("BRAWLER"));
+            ClassesRegistry.Register(cards.GetCardWithName("DECAY"), CardType.Card, cards.GetCardWithName("BRAWLER"));
+            ClassesRegistry.Register(cards.GetCardWithName("RADIANCE"), CardType.Card, cards.GetCardWithName("BRAWLER"));
 
-            ClassesRegistry.Regester(cards.GetCardWithName("LIFESTEALER"), CardType.Entry);
-            ClassesRegistry.Regester(cards.GetCardWithName("PARASITE"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("LEECH"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("POISON"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("DAZZLE"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("TASTE OF BLOOD"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
+            ClassesRegistry.Register(cards.GetCardWithName("LIFESTEALER"), CardType.Entry);
+            ClassesRegistry.Register(cards.GetCardWithName("PARASITE"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
+            ClassesRegistry.Register(cards.GetCardWithName("LEECH"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
+            ClassesRegistry.Register(cards.GetCardWithName("POISON"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
+            ClassesRegistry.Register(cards.GetCardWithName("DAZZLE"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
+            ClassesRegistry.Register(cards.GetCardWithName("TASTE OF BLOOD"), CardType.Card, cards.GetCardWithName("LIFESTEALER"));
 
-            ClassesRegistry.Regester(cards.GetCardWithName("Demonic pact"), CardType.Entry);
-            ClassesRegistry.Regester(cards.GetCardWithName("TOXIC CLOUD"), CardType.Card, cards.GetCardWithName("Demonic pact"));
-            ClassesRegistry.Regester(cards.GetCardWithName("SILENCE"), CardType.Card, cards.GetCardWithName("Demonic pact"));
-            ClassesRegistry.Regester(cards.GetCardWithName("ABYSSAL COUNTDOWN"), CardType.Card, cards.GetCardWithName("Demonic pact"));
-            ClassesRegistry.Regester(cards.GetCardWithName("GROW"), CardType.Card, cards.GetCardWithName("Demonic pact"));
-            ClassesRegistry.Regester(cards.GetCardWithName("PHOENIX"), CardType.Card, cards.GetCardWithName("Demonic pact"));
+            ClassesRegistry.Register(cards.GetCardWithName("Demonic pact"), CardType.Entry);
+            ClassesRegistry.Register(cards.GetCardWithName("TOXIC CLOUD"), CardType.Card, cards.GetCardWithName("Demonic pact"));
+            ClassesRegistry.Register(cards.GetCardWithName("SILENCE"), CardType.Card, cards.GetCardWithName("Demonic pact"));
+            ClassesRegistry.Register(cards.GetCardWithName("ABYSSAL COUNTDOWN"), CardType.Card, cards.GetCardWithName("Demonic pact"));
+            ClassesRegistry.Register(cards.GetCardWithName("GROW"), CardType.Card, cards.GetCardWithName("Demonic pact"));
+            ClassesRegistry.Register(cards.GetCardWithName("PHOENIX"), CardType.Card, cards.GetCardWithName("Demonic pact"));
 
-            ClassesRegistry.Regester(cards.GetCardWithName("EMPOWER"), CardType.Entry);
-            ClassesRegistry.Regester(cards.GetCardWithName("EMP"), CardType.Card, cards.GetCardWithName("EMPOWER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("REMOTE"), CardType.Card, cards.GetCardWithName("EMPOWER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("SNEAKY"), CardType.Card, cards.GetCardWithName("EMPOWER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("THRUSTER"), CardType.Card, cards.GetCardWithName("EMPOWER"));
-            ClassesRegistry.Regester(cards.GetCardWithName("HOMING"), CardType.Card, cards.GetCardWithName("EMPOWER"));
+            ClassesRegistry.Register(cards.GetCardWithName("EMPOWER"), CardType.Entry);
+            ClassesRegistry.Register(cards.GetCardWithName("EMP"), CardType.Card, cards.GetCardWithName("EMPOWER"));
+            ClassesRegistry.Register(cards.GetCardWithName("REMOTE"), CardType.Card, cards.GetCardWithName("EMPOWER"));
+            ClassesRegistry.Register(cards.GetCardWithName("SNEAKY"), CardType.Card, cards.GetCardWithName("EMPOWER"));
+            ClassesRegistry.Register(cards.GetCardWithName("THRUSTER"), CardType.Card, cards.GetCardWithName("EMPOWER"));
+            ClassesRegistry.Register(cards.GetCardWithName("HOMING"), CardType.Card, cards.GetCardWithName("EMPOWER"));
         }
 
     }

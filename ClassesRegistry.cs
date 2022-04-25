@@ -10,27 +10,27 @@ namespace ClassesManagerReborn
         internal static Dictionary<CardInfo, ClassObject> Registry = new Dictionary<CardInfo, ClassObject>();
         internal static List<CardInfo> ClassInfos = new List<CardInfo>();
 
-        public static ClassObject Regester(CardInfo card, CardType type, int CardLimit = 0)
+        public static ClassObject Register(CardInfo card, CardType type, int CardLimit = 0)
         {
             if(type != CardType.Entry)
             {
                 throw new ArgumentException("Non-entry cards require a requirment tree to resester");
             }
-            return Regester(card, type, new CardInfo[] { }, CardLimit);
+            return Register(card, type, new CardInfo[] { }, CardLimit);
         }
-        public static ClassObject Regester(CardInfo card, CardType type, CardInfo RequiredClass, int CardLimit = 0)
+        public static ClassObject Register(CardInfo card, CardType type, CardInfo RequiredClass, int CardLimit = 0)
         {
-            return Regester(card, type, new CardInfo[] { RequiredClass }, CardLimit);
+            return Register(card, type, new CardInfo[] { RequiredClass }, CardLimit);
         }
-        public static ClassObject Regester(CardInfo card, CardType type, CardInfo[] RequiredClassTree, int CardLimit = 0)
+        public static ClassObject Register(CardInfo card, CardType type, CardInfo[] RequiredClassTree, int CardLimit = 0)
         {
-            return Regester(card, type, new CardInfo[][] { RequiredClassTree }, CardLimit);
+            return Register(card, type, new CardInfo[][] { RequiredClassTree }, CardLimit);
         }
-        public static ClassObject Regester(CardInfo card, CardType type, CardInfo[][] RequiredClassesTree, int CardLimit = 0)
+        public static ClassObject Register(CardInfo card, CardType type, CardInfo[][] RequiredClassesTree, int CardLimit = 0)
         {
             if (Registry.ContainsKey(card))
             {
-                throw new ArgumentException($"Card {card.cardName} has already been regestered");
+                throw new ArgumentException($"Card {card.cardName} has already been Registered");
             }
             ClassObject classObject = new ClassObject(card, type, RequiredClassesTree, card.allowMultiple? CardLimit : 1);
             Registry.Add(card, classObject);
