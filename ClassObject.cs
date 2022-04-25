@@ -11,11 +11,12 @@ namespace ClassesManagerReborn
         public CardType type { internal set; get; }
         public CardInfo[][] RequiredClassesTree;
         public int cap;
-        private bool noBlacklist = false;
+        private List<CardInfo> blackList = new List<CardInfo>();
+        private bool whitelistAll = false;
         private List<CardInfo> whiteList = new List<CardInfo>();
 
 
-        public List<CardInfo> GetwhiteList { get { if (((CardType.Card | CardType.Branch) & type) != 0) return null; if (noBlacklist) return ClassesRegistry.GetClassInfos(type); return whiteList; } }
+        public List<CardInfo> GetwhiteList { get { if (((CardType.Card | CardType.Branch) & type) != 0) return null; if (whitelistAll) return ClassesRegistry.GetClassInfos(type); return whiteList; } }
 
         public ClassObject(CardInfo card, CardType type, CardInfo[][] requiredClassesTree, int cap = 0)
         {
@@ -28,20 +29,30 @@ namespace ClassesManagerReborn
 
         public void WhitelistAll(bool value = true)
         {
-            noBlacklist = value;
+            whitelistAll = value;
         }
 
         public void Whitelist(CardInfo card)
         {
-            noBlacklist = false;
+            whitelistAll = false;
             if(!whiteList.Contains(card))
                 whiteList.Add(card);
         }
 
-        public void dewhitelist(CardInfo card)
+        public void DeWhitelist(CardInfo card)
         {
-            noBlacklist = false;
+            whitelistAll = false;
             whiteList.Remove(card);
+        }
+        public void Blacklist(CardInfo card)
+        {
+            if(!blackList.Contains(card))
+                blackList.Add(card);
+        }
+
+        public void DeBhitelist(CardInfo card)
+        {
+            blackList.Remove(card);
         }
 
         public bool PlayerIsAllowedCard(Player player)
@@ -62,7 +73,11 @@ namespace ClassesManagerReborn
                     if (p.playerID != playerID && p.data.currentCards.Contains(card)) return false;
                 }
             }
-            if (!ClassesManager.Ignore_Blacklist.Value && !noBlacklist && ((CardType.Entry | CardType.SubClass) & type) != 0)
+            if (blackList.Any())
+            {
+                if (currentCards.Where(c => blackList.Contains(c)).Any()) return false;
+            }
+            if (!ClassesManager.Ignore_Blacklist.Value && !whitelistAll && ((CardType.Entry | CardType.SubClass) & type) != 0)
             {
                 if (whiteList.Any())
                 {

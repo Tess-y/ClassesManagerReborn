@@ -44,7 +44,7 @@ namespace ClassesManagerReborn
 
         internal MethodBase GetRelativeRarity;
 
-        internal System.Collections.IEnumerator InstashateModClasses()
+        internal System.Collections.IEnumerator InstantiateModClasses()
         {
             List<Task> tasks = new List<Task>();
             PluginInfo[] pluginInfos = BepInEx.Bootstrap.Chainloader.PluginInfos.Values.Where(pi => pi.Dependencies.Any(d => d.DependencyGUID == ModId)).ToArray();
@@ -104,7 +104,7 @@ namespace ClassesManagerReborn
 
 
             //instance.ExecuteAfterFrames(10, TestMode);
-            instance.StartCoroutine(InstashateModClasses());
+            instance.StartCoroutine(InstantiateModClasses());
         }
 
         private void OnHandShakeCompleted()
