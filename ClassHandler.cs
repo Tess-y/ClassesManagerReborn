@@ -8,5 +8,7 @@ namespace ClassesManagerReborn
     public abstract class ClassHandler
     {
         public abstract IEnumerator Init();
+
+        public virtual IEnumerator PostInit() { yield break; }
     }
 }

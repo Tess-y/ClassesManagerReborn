@@ -27,32 +27,37 @@ namespace ClassesManagerReborn
         }
 
 
-        public void WhitelistAll(bool value = true)
+        public ClassObject WhitelistAll(bool value = true)
         {
             whitelistAll = value;
+            return this;
         }
 
-        public void Whitelist(CardInfo card)
+        public ClassObject Whitelist(CardInfo card)
         {
             whitelistAll = false;
             if(!whiteList.Contains(card))
                 whiteList.Add(card);
+            return this;
         }
 
-        public void DeWhitelist(CardInfo card)
+        public ClassObject DeWhitelist(CardInfo card)
         {
             whitelistAll = false;
             whiteList.Remove(card);
+            return this;
         }
-        public void Blacklist(CardInfo card)
+        public ClassObject Blacklist(CardInfo card)
         {
             if(!blackList.Contains(card))
                 blackList.Add(card);
+            return this;
         }
 
-        public void DeBhitelist(CardInfo card)
+        public ClassObject DeBhitelist(CardInfo card)
         {
             blackList.Remove(card);
+            return this;
         }
 
         public bool PlayerIsAllowedCard(Player player)

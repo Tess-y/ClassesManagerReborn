@@ -31,7 +31,6 @@ namespace ClassesManagerReborn
         public const string Version = "0.0.0";
         public const string ModInitials = "CMR";
 
-        public const string End_Registration_Hook = "End_Registration_Hook";
         public static ClassesManager instance { get; private set; }
 
         public static ConfigEntry<bool> DEBUG;
@@ -48,6 +47,7 @@ namespace ClassesManagerReborn
         {
             List<Task> tasks = new List<Task>();
             PluginInfo[] pluginInfos = BepInEx.Bootstrap.Chainloader.PluginInfos.Values.Where(pi => pi.Dependencies.Any(d => d.DependencyGUID == ModId)).ToArray();
+            List<ClassHandler> handlers = new List<ClassHandler>();
             foreach (PluginInfo info in pluginInfos)
             {
                 Assembly mod = Assembly.LoadFile(info.Location);
@@ -57,15 +57,14 @@ namespace ClassesManagerReborn
                 foreach (Type type in types)
                 {
                     ClassHandler handler = (ClassHandler)Activator.CreateInstance(type);
+                    handlers.Add(handler);
                     tasks.Add(new Task(handler.Init()));
                     Debug("...");
                 }
                 
             }
             while (tasks.Any(t => t.Running)) yield return null;
-
-            Debug(End_Registration_Hook);
-            yield return GameModeManager.TriggerHook(End_Registration_Hook);
+            foreach(ClassHandler h in handlers) yield return h.PostInit();
         }
 
         void Awake()

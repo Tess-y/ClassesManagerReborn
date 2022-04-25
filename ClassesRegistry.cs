@@ -40,7 +40,11 @@ namespace ClassesManagerReborn
             return classObject;
         }
 
-
+        public static ClassObject Get(CardInfo card)
+        {
+            if (Registry.ContainsKey(card)) return Registry[card];
+            return null;
+        }
 
         public static List<ClassObject> GetClassObjects(CardType type)
         {
