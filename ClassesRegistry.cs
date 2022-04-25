@@ -61,9 +61,9 @@ namespace ClassesManagerReborn
     [Flags]
     public enum CardType
     {
-        Entry = 0x1,
-        SubClass = 0x2,
-        Branch = 0x4,
-        Card = 0x8,
+        Entry = 0x1, //The entry point of a class, normally players can only have one Entry card.
+        SubClass = 0x2, //The entry point of a subclass, normally players can only have one SubClass card.
+        Branch = 0x4, //Indicats that there are other cards locked behind this one.
+        Card = 0x8, //A normal card in the class system
     }
 }

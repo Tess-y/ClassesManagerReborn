@@ -15,6 +15,9 @@ namespace ClassesManagerReborn.Util
         }
     }
 
+    /// <summary>
+    /// Can be added to cards to add text to the lower right hand cornner.
+    /// </summary>
     public class ClassNameMono : MonoBehaviour
     {
         public string className = "Class";

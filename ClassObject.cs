@@ -15,8 +15,10 @@ namespace ClassesManagerReborn
         private bool whitelistAll = false;
         private List<CardInfo> whiteList = new List<CardInfo>();
 
-
-        public List<CardInfo> GetwhiteList { get { if (((CardType.Card | CardType.Branch) & type) != 0) return null; if (whitelistAll) return ClassesRegistry.GetClassInfos(type); return whiteList; } }
+        ///The list of Class or Subclass cards a player can have while still bein eligable for this Class/Subclass
+        public List<CardInfo> WhiteList { get { if (((CardType.Card | CardType.Branch) & type) != 0) return null; if (whitelistAll) return ClassesRegistry.GetClassInfos(type); return whiteList; } }
+        ///The list of extra cards that make a player unable to get this card.
+        public List<CardInfo> BlackList { get { return blackList.ToList(); } }
 
         public ClassObject(CardInfo card, CardType type, CardInfo[][] requiredClassesTree, int cap = 0)
         {
@@ -26,13 +28,18 @@ namespace ClassesManagerReborn
             RequiredClassesTree = requiredClassesTree;
         }
 
-
+        /// <summary>
+        /// Sets wether to act as if all cards are on the whitelist
+        /// </summary>
         public ClassObject WhitelistAll(bool value = true)
         {
             whitelistAll = value;
             return this;
         }
 
+        /// <summary>
+        /// Adds a card to the whitelist
+        /// </summary>
         public ClassObject Whitelist(CardInfo card)
         {
             whitelistAll = false;
@@ -41,12 +48,19 @@ namespace ClassesManagerReborn
             return this;
         }
 
+        /// <summary>
+        /// removes a card from the whitelist
+        /// </summary>
         public ClassObject DeWhitelist(CardInfo card)
         {
             whitelistAll = false;
             whiteList.Remove(card);
             return this;
         }
+
+        /// <summary>
+        /// Adds a card to the blacklist
+        /// </summary>
         public ClassObject Blacklist(CardInfo card)
         {
             if(!blackList.Contains(card))
@@ -54,17 +68,26 @@ namespace ClassesManagerReborn
             return this;
         }
 
+        /// <summary>
+        /// removes a card from the blacklist
+        /// </summary>
         public ClassObject DeBhitelist(CardInfo card)
         {
             blackList.Remove(card);
             return this;
         }
 
+        /// <summary>
+        /// Checks if the given player is allowed to have the class card under the classes system
+        /// </summary>
         public bool PlayerIsAllowedCard(Player player)
         {
             return SimulatedPlayerIsAllowedCard(player.playerID, player.data.currentCards);
         }
 
+        /// <summary>
+        /// Checks if the given player is allowed to have the class card under the classes system, While pretending that they have exactly the cards provided.
+        /// </summary>
         public bool SimulatedPlayerIsAllowedCard(int playerID, List<CardInfo> currentCards)
         { 
             if (cap > 0 && currentCards.FindAll(c => c == card).Count >= cap)
@@ -145,6 +168,11 @@ namespace ClassesManagerReborn
             return cardInfos.Any() ? cardInfos[0] : null;
         }
 
+        /// <summary>
+        /// A funtion requested by willuwontu for creating requiremnt arrays for a card that needs any combanation of N cards from a set with repeats alowed.
+        /// </summary>
+        /// <param name="cards"> The pool of cards to pull from </param>
+        /// <param name="required_count"> the number of cards needed </param>
         public static CardInfo[][] TecTreeHelper(CardInfo[] cards, int required_count)
         {
             List<CardInfo[]> ret = new List<CardInfo[]>();

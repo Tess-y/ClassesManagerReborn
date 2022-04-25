@@ -51,15 +51,12 @@ namespace ClassesManagerReborn
             foreach (PluginInfo info in pluginInfos)
             {
                 Assembly mod = Assembly.LoadFile(info.Location);
-                Debug(mod.FullName);
                 Type[] types = mod.GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(ClassHandler))).ToArray();
-                Debug(types.Length);
                 foreach (Type type in types)
                 {
                     ClassHandler handler = (ClassHandler)Activator.CreateInstance(type);
                     handlers.Add(handler);
                     tasks.Add(new Task(handler.Init()));
-                    Debug("...");
                 }
                 
             }
@@ -149,6 +146,9 @@ namespace ClassesManagerReborn
         }
 
 
+        /// <summary>
+        /// Generates fake classes using vanilla cards for testing purposes 
+        /// </summary>
         private static void TestMode()
         {
             ModdingUtils.Utils.Cards cards = ModdingUtils.Utils.Cards.instance;
