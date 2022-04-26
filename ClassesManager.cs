@@ -38,7 +38,7 @@ namespace ClassesManagerReborn
         public static ConfigEntry<bool> Ignore_Blacklist;
         public static ConfigEntry<bool> Ensure_Class_Card;
         public static ConfigEntry<bool> Class_War;
-        public static ConfigEntry<bool> Double_Odds;
+        public static ConfigEntry<float> Class_Odds;
 
 
         internal MethodBase GetRelativeRarity;
@@ -87,7 +87,7 @@ namespace ClassesManagerReborn
             Ignore_Blacklist = base.Config.Bind<bool>(ModId, "Ignore_Blacklist", false, "Allow more then one class per player");
             Ensure_Class_Card = base.Config.Bind<bool>(ModId, "Ensure_Class_Card", false, "Guarantee players in a class will draw a card for that class if able");
             Class_War = base.Config.Bind<bool>(ModId, "Class_War", false, "Prevent players from having the same class");
-            Double_Odds = base.Config.Bind<bool>(ModId, "Double_Odds", false, "Double the chances of a class restricted card to show up (Intended for large packs)");
+            Class_Odds = base.Config.Bind<float>(ModId, "Class_Odds", 1f, "Incresses the chances of a class restricted card to show up (Intended for large packs)");
         }
 
         void Start()
@@ -107,18 +107,18 @@ namespace ClassesManagerReborn
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                NetworkingManager.RPC_Others(typeof(ClassesManager), nameof(SyncSettings), new object[] { Force_Class.Value, Ignore_Blacklist.Value, Ensure_Class_Card.Value, Class_War.Value, Double_Odds.Value });
+                NetworkingManager.RPC_Others(typeof(ClassesManager), nameof(SyncSettings), new object[] { Force_Class.Value, Ignore_Blacklist.Value, Ensure_Class_Card.Value, Class_War.Value, Class_Odds.Value });
             }
         }
 
         [UnboundRPC]
-        private static void SyncSettings(bool host_Force_Class, bool host_Ignore_Blacklist, bool host_Ensure_Class_Card, bool host_Class_War, bool host_Double_Odds)
+        private static void SyncSettings(bool host_Force_Class, bool host_Ignore_Blacklist, bool host_Ensure_Class_Card, bool host_Class_War, float host_Double_Odds)
         {
             Force_Class.Value = host_Force_Class;
             Ignore_Blacklist.Value = host_Ignore_Blacklist;
             Ensure_Class_Card.Value = host_Ensure_Class_Card;
             Class_War.Value = host_Class_War;
-            Double_Odds.Value = host_Double_Odds;
+            Class_Odds.Value = host_Double_Odds;
         }
 
         private void NewGUI(GameObject menu)
@@ -129,7 +129,7 @@ namespace ClassesManagerReborn
             MenuHandler.CreateToggle(Ignore_Blacklist.Value, "Allow more then one class and subclass per player", menu, value => Ignore_Blacklist.Value = value);
             MenuHandler.CreateToggle(Ensure_Class_Card.Value, "Guarantee players in a class will draw a card for that class if able (NOT YET IMPLMENTED)", menu, value => Ensure_Class_Card.Value = value);
             MenuHandler.CreateToggle(Class_War.Value, "Prevent players from having the same class", menu, value => Class_War.Value = value);
-            MenuHandler.CreateToggle(Double_Odds.Value, "Double the chances of a class restricted card to show up (Intended for large packs)", menu, value => Double_Odds.Value = value);
+            MenuHandler.CreateSlider("Increase the chances of a class restricted card to show up (Intended for large packs)", menu, 30, 1, 10, Class_Odds.Value, value => Class_Odds.Value = value, out UnityEngine.UI.Slider _);
 
 
             MenuHandler.CreateText("", menu, out _);

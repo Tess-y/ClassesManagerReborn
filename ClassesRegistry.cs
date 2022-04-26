@@ -18,10 +18,6 @@ namespace ClassesManagerReborn
         /// <param name="CardLimit">The max number of copies a player is alowed to have, 0 for infinite</param>
         public static ClassObject Register(CardInfo card, CardType type, int CardLimit = 0)
         {
-            if(type != CardType.Entry)
-            {
-                throw new ArgumentException("Non-entry cards require a requirment tree to resester");
-            }
             return Register(card, type, new CardInfo[] { }, CardLimit);
         }
 
