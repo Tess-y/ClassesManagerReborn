@@ -21,7 +21,7 @@ namespace ClassesManagerReborn.Patchs
                 Player player = PickingPlayer(cardChoice);
                 if (player == null || player.data.currentCards.Intersect(ClassesRegistry.ClassInfos).Any()) { return true; }
                 ClassesManager.Debug("Forcing Class");
-                CardInfo[] validCards = ClassesRegistry.ClassInfos.Where(c => ModdingUtils.Utils.Cards.instance.PlayerIsAllowedCard(player, c) && GetRelativeRarity(c) > 0f).ToArray();
+                CardInfo[] validCards = cardChoice.cards.Intersect(ClassesRegistry.ClassInfos.Where(c => ModdingUtils.Utils.Cards.instance.PlayerIsAllowedCard(player, c) && GetRelativeRarity(c) > 0f)).ToArray();
 
                 try
                 {
@@ -33,7 +33,7 @@ namespace ClassesManagerReborn.Patchs
                 }
                 catch (NullReferenceException)
                 {
-                    validCards = ClassesRegistry.ClassInfos.Where(c => ModdingUtils.Utils.Cards.instance.PlayerIsAllowedCard(player, c) && GetRelativeRarity(c) > 0f).ToArray();
+                    validCards = cardChoice.cards.Intersect(ClassesRegistry.ClassInfos.Where(c => ModdingUtils.Utils.Cards.instance.PlayerIsAllowedCard(player, c) && GetRelativeRarity(c) > 0f)).ToArray();
                 }
 
                 // if there are no valid cards immediately return the Null Card from SpawnUniqueCardPatch

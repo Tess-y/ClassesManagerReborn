@@ -28,7 +28,7 @@ namespace ClassesManagerReborn
     {
         private const string ModId = "root.classes.manager.reborn";
         private const string ModName = "Classes Manager Reborn";
-        public const string Version = "1.1.1";
+        public const string Version = "1.1.2";
         public const string ModInitials = "CMR";
 
         public static ClassesManager instance { get; private set; }
