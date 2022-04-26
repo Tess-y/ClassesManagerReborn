@@ -10,6 +10,12 @@ namespace ClassesManagerReborn
         internal static Dictionary<CardInfo, ClassObject> Registry = new Dictionary<CardInfo, ClassObject>();
         internal static List<CardInfo> ClassInfos = new List<CardInfo>();
 
+        /// <summary>
+        /// Resesters a card with the manager
+        /// </summary>
+        /// <param name="card">The card to regester</param>
+        /// <param name="type">The type of card being regestered</param>
+        /// <param name="CardLimit">The max number of copies a player is alowed to have, 0 for infinite</param>
         public static ClassObject Register(CardInfo card, CardType type, int CardLimit = 0)
         {
             if(type != CardType.Entry)
@@ -18,14 +24,38 @@ namespace ClassesManagerReborn
             }
             return Register(card, type, new CardInfo[] { }, CardLimit);
         }
+
+        /// <summary>
+        /// Resesters a card with the manager
+        /// </summary>
+        /// <param name="card">The card to regester</param>
+        /// <param name="type">The type of card being regestered</param>
+        /// <param name="RequiredClass">The Card a player must have inorder to get this card</param>
+        /// <param name="CardLimit">The max number of copies a player is alowed to have, 0 for infinite</param>
         public static ClassObject Register(CardInfo card, CardType type, CardInfo RequiredClass, int CardLimit = 0)
         {
             return Register(card, type, new CardInfo[] { RequiredClass }, CardLimit);
         }
+
+        /// <summary>
+        /// Resesters a card with the manager
+        /// </summary>
+        /// <param name="card">The card to regester</param>
+        /// <param name="type">The type of card being regestered</param>
+        /// <param name="RequiredClassTree">The Cards a player must have inorder to get this card</param>
+        /// <param name="CardLimit">The max number of copies a player is alowed to have, 0 for infinite</param>
         public static ClassObject Register(CardInfo card, CardType type, CardInfo[] RequiredClassTree, int CardLimit = 0)
         {
             return Register(card, type, new CardInfo[][] { RequiredClassTree }, CardLimit);
         }
+
+        /// <summary>
+        /// Resesters a card with the manager
+        /// </summary>
+        /// <param name="card">The card to regester</param>
+        /// <param name="type">The type of card being regestered</param>
+        /// <param name="RequiredClassesTree">A list of lists of cards, a player must have all the cards on at least on of the lists to get the card</param>
+        /// <param name="CardLimit">The max number of copies a player is alowed to have, 0 for infinite</param>
         public static ClassObject Register(CardInfo card, CardType type, CardInfo[][] RequiredClassesTree, int CardLimit = 0)
         {
             if (Registry.ContainsKey(card))
