@@ -29,7 +29,7 @@ namespace ClassesManagerReborn
     {
         private const string ModId = "root.classes.manager.reborn";
         private const string ModName = "Classes Manager Reborn";
-        public const string Version = "1.1.5";
+        public const string Version = "1.1.6";
         public const string ModInitials = "CMR";
 
         public static ClassesManager instance { get; private set; }
@@ -41,7 +41,7 @@ namespace ClassesManagerReborn
         public static ConfigEntry<bool> Class_War;
         public static ConfigEntry<float> Class_Odds;
 
-        public CardInfo jackCard = null;
+        internal static CardInfo jackCard = null;
 
         internal MethodBase GetRelativeRarity;
 
@@ -64,13 +64,6 @@ namespace ClassesManagerReborn
             }
             while (tasks.Any(t => t.Running)) yield return null;
             foreach (ClassHandler h in handlers) { Debug($"{h.GetType().Name} PostInit"); yield return h.PostInit(); }
-            while (!jackCard) yield return null;
-            ClassObject jack = ClassesRegistry.Register(jackCard, CardType.Card);
-            List<CardInfo> classes = ClassesRegistry.GetClassInfos(CardType.Entry);
-            foreach (CardInfo card in classes)
-            {
-                jack.BlackList.Add(card);
-            }
             Debug("Class setupCompleate", true);
         }
 

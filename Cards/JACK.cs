@@ -21,7 +21,8 @@ namespace ClassesManagerReborn.Cards
                 List<CardInfo> classes = ClassesRegistry.GetClassInfos(CardType.Entry);
                 foreach (CardInfo card in classes)
                 {
-                    ModdingUtils.Utils.Cards.instance.AddCardToPlayer(player, card, addToCardBar: true);
+                    if(!player.data.currentCards.Contains(card))
+                        ModdingUtils.Utils.Cards.instance.AddCardToPlayer(player, card, addToCardBar: true);
                 }
             });
         }

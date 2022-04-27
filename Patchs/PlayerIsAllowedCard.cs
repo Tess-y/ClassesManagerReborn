@@ -16,6 +16,9 @@ namespace ClassesManagerReborn.Patchs
             if (ClassesRegistry.Registry.ContainsKey(card))
             {
                 __result = ClassesRegistry.Registry[card].PlayerIsAllowedCard(player);
+            }else if(card == ClassesManager.jackCard)
+            {
+                __result = player.data.currentCards.Intersect(ClassesRegistry.GetClassInfos(CardType.Entry)).Any();
             }
         }
     }
