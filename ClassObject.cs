@@ -140,13 +140,19 @@ namespace ClassesManagerReborn
 
         internal CardInfo? GetMissingClass(Player player)
         {
+            return GetMissingClass(player.data.currentCards.ToList());
+        }
+
+        internal CardInfo? GetMissingClass(List<CardInfo> cards)
+        {
+
             List<CardInfo> cardInfos = new List<CardInfo>();
             bool first = true;
 
             foreach (CardInfo[] RequiredClassTree in RequiredClassesTree)
             {
                 List<CardInfo> missing = new List<CardInfo>();
-                List<CardInfo> playerCards = player.data.currentCards.ToList();
+                List<CardInfo> playerCards = cards.ToList();
                 foreach (CardInfo card in RequiredClassTree)
                 {
                     if (playerCards.Contains(card))
@@ -162,7 +168,7 @@ namespace ClassesManagerReborn
                 {
                     first = false;
                     cardInfos = missing;
-                } 
+                }
             }
 
             return cardInfos.Any() ? cardInfos[0] : null;

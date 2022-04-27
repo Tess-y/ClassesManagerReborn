@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnboundLib.GameModes;
 using ClassesManagerReborn.Util;
+using UnboundLib.Cards;
 
 namespace ClassesManagerReborn
 {
@@ -28,7 +29,7 @@ namespace ClassesManagerReborn
     {
         private const string ModId = "root.classes.manager.reborn";
         private const string ModName = "Classes Manager Reborn";
-        public const string Version = "1.1.2";
+        public const string Version = "1.1.5";
         public const string ModInitials = "CMR";
 
         public static ClassesManager instance { get; private set; }
@@ -40,6 +41,7 @@ namespace ClassesManagerReborn
         public static ConfigEntry<bool> Class_War;
         public static ConfigEntry<float> Class_Odds;
 
+        public CardInfo jackCard = null;
 
         internal MethodBase GetRelativeRarity;
 
@@ -61,7 +63,15 @@ namespace ClassesManagerReborn
                 
             }
             while (tasks.Any(t => t.Running)) yield return null;
-            foreach(ClassHandler h in handlers) yield return h.PostInit();
+            foreach (ClassHandler h in handlers) { Debug($"{h.GetType().Name} PostInit"); yield return h.PostInit(); }
+            while (!jackCard) yield return null;
+            ClassObject jack = ClassesRegistry.Register(jackCard, CardType.Card);
+            List<CardInfo> classes = ClassesRegistry.GetClassInfos(CardType.Entry);
+            foreach (CardInfo card in classes)
+            {
+                jack.BlackList.Add(card);
+            }
+            Debug("Class setupCompleate", true);
         }
 
         void Awake()
@@ -101,6 +111,11 @@ namespace ClassesManagerReborn
 
             //instance.ExecuteAfterFrames(10, TestMode);
             instance.StartCoroutine(InstantiateModClasses());
+
+            GameModeManager.AddHook(GameModeHooks.HookPlayerPickEnd, CleanupClasses);
+            GameModeManager.AddHook(GameModeHooks.HookPickEnd, CleanupClasses);
+
+            CustomCard.BuildCard<Cards.JACK>(card => jackCard = card);
         }
 
         private void OnHandShakeCompleted()
@@ -145,6 +160,39 @@ namespace ClassesManagerReborn
             }
         }
 
+
+        public static System.Collections.IEnumerator CleanupClasses(IGameModeHandler gm)
+        {
+            foreach (Player player in PlayerManager.instance.players)
+            {
+                CleanupClassCards(player);
+            }
+            yield break;
+        }
+
+        internal static void CleanupClassCards(Player player)
+        {
+            List<CardInfo> cards = player.data.currentCards.ToList();
+            bool eddited = false;
+            for(int i = 0; i < cards.Count; ++i)
+            {
+                if (ClassesRegistry.Registry.ContainsKey(cards[i]))
+                {
+                    CardInfo? requriment = ClassesRegistry.Registry[cards[i]].GetMissingClass(player);
+                    if (requriment != null)
+                    {
+                        cards[i] = requriment;
+                        eddited = true;
+                        i = 0;
+                    }
+                }
+            }
+            if (eddited)
+            {
+                ModdingUtils.Utils.Cards.instance.RemoveAllCardsFromPlayer(player);
+                ModdingUtils.Utils.Cards.instance.AddCardsToPlayer(player, cards.ToArray(), true, addToCardBar: true);
+            }
+        }
 
         /// <summary>
         /// Generates fake classes using vanilla cards for testing purposes 
