@@ -18,7 +18,7 @@ namespace ClassesManagerReborn.Patchs
                 __result = ClassesRegistry.Registry[card].PlayerIsAllowedCard(player);
             }else if(card == ClassesManager.jackCard)
             {
-                __result = player.data.currentCards.Intersect(ClassesRegistry.GetClassInfos(CardType.Entry)).Any();
+                __result = !player.data.currentCards.Intersect(ClassesRegistry.GetClassInfos(CardType.Entry)).Any();
             }
         }
     }

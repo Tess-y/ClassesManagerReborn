@@ -56,5 +56,10 @@ namespace ClassesManagerReborn.Cards
         {
             return "JACK";
         }
+
+        public override string GetModName()
+        {
+            return "CMR";
+        }
     }
 }
