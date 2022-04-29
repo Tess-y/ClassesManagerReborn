@@ -92,5 +92,6 @@ namespace ClassesManagerReborn
         SubClass = 0x2, //The entry point of a subclass, normally players can only have one SubClass card.
         Branch = 0x4, //Indicats that there are other cards locked behind this one.
         Card = 0x8, //A normal card in the class system
+        NonClassCard = 0x16, //Marks a card that should be ingnored by cards that care about classes.
     }
 }
