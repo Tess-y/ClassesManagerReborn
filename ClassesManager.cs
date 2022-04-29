@@ -63,7 +63,9 @@ namespace ClassesManagerReborn
                 
             }
             while (tasks.Any(t => t.Running)) yield return null;
-            foreach (ClassHandler h in handlers) { Debug($"{h.GetType().Name} PostInit"); yield return h.PostInit(); }
+            tasks.Clear();
+            foreach (ClassHandler h in handlers) tasks.Add(new Task(h.PostInit()));
+            while (tasks.Any(t => t.Running)) yield return null;
             Debug("Class setupCompleate", true);
         }
 
