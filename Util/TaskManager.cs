@@ -180,13 +180,20 @@ namespace ClassesManagerReborn.Util
 						yield return null;
 					else
 					{
-						if (e != null && e.MoveNext())
+						try
 						{
-							yield return e.Current;
-						}
-						else
+							if (!(e != null && e.MoveNext()))
+							{
+								running = false;
+							}
+						}catch (Exception ex)
 						{
 							running = false;
+							ClassesManager.Debug(ex.Message, true);
+						}
+                        if (running)
+                        {
+							yield return e.Current;
 						}
 					}
 				}
