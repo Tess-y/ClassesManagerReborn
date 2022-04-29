@@ -10,6 +10,7 @@ namespace ClassesManagerReborn.Cards
 {
     internal class JACK : CustomCard
     {
+        internal static CardInfo card;
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers)
         {
             cardInfo.allowMultiple = false;

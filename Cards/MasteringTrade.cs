@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 using UnboundLib.Cards;
 using UnityEngine;
@@ -11,21 +11,85 @@ namespace ClassesManagerReborn.Cards
 {
     internal class MasteringTrade : CustomCard
     {
+        internal static CardInfo card;
+        internal static List<Player> masteringPlayers = new List<Player>();
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers)
         {
             cardInfo.GetAdditionalData().canBeReassigned = false;
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
-            ClassesManager.instance.ExecuteAfterFrames(2, () => {
+            masteringPlayers.Add(player);
+        }
 
-                List<CardInfo> classes = ClassesRegistry.GetClassInfos(~CardType.Entry);
-                foreach (CardInfo card in classes)
+        internal static IEnumerator IAddClassCards(Player player)
+        {
+            ClassObject[] classObjects = ClassesRegistry.Registry.Values.Where(classObj => ModdingUtils.Utils.Cards.instance.PlayerIsAllowedCard(player, classObj.card)).ToArray();
+
+            foreach (var classObj in classObjects)
+            {
+                UnityEngine.Debug.Log(classObj.card.cardName);
+            }
+
+            List<CardInfo> classes = ClassesRegistry.Registry.Values.Select(obj => obj.card).Intersect(player.data.currentCards).Distinct().ToList();
+
+            classes = classes.Where(card => { 
+                return classObjects.Any(classObj => { 
+                    return classObj.RequiredClassesTree.Any(list => {
+
+                        var names = list.Select(item => item.cardName);
+                        var reqString = string.Join(", ", names);
+                        UnityEngine.Debug.Log($"{card.cardName} ?= {reqString} -> {classObj.card.cardName}");
+
+                        return list.Contains(card); 
+                    }); 
+                }); 
+            }).ToList();
+
+            classes.Shuffle();
+
+            foreach (var classC in classes)
+            {
+                UnityEngine.Debug.Log(classC.cardName);
+            }
+
+            CardInfo chosenClass = classes[0];
+
+            CardInfo[] classCards = classObjects.Where(classObj => classObj.RequiredClassesTree.Any(list => list.Contains(chosenClass))).Select(classObj => classObj.card).ToArray();
+
+            classCards.Shuffle();
+
+            // Add a 2 frame wait before adding the cards
+            yield return null;
+            yield return null;
+
+            int cardCount = 0;
+
+            foreach (var card in classCards)
+            {
+                if (!ModdingUtils.Utils.Cards.instance.PlayerIsAllowedCard(player, card))
                 {
-                    if(!player.data.currentCards.Contains(card))
-                        ModdingUtils.Utils.Cards.instance.AddCardToPlayer(player, card, addToCardBar: true);
+                    continue;
                 }
-            });
+
+                cardCount = player.data.currentCards.Count();
+
+                ModdingUtils.Utils.Cards.instance.AddCardToPlayer(player, card, false, "", 2f, 2f, true);
+
+                yield return new WaitUntil(() =>
+                {
+                    return ((player.data.currentCards.Count > cardCount) || (player.data.currentCards[player.data.currentCards.Count-1] == card));
+                });
+
+                int i = 0;
+
+                while (i++ < 10)
+                {
+                    yield return null;
+                }
+            }
+
+            yield break;
         }
 
         protected override GameObject GetCardArt()
@@ -35,12 +99,12 @@ namespace ClassesManagerReborn.Cards
 
         protected override string GetDescription()
         {
-            return "Get a random class card for a class you have.";
+            return "Get a random number of cards for a random class you have.";
         }
 
         protected override CardInfo.Rarity GetRarity()
         {
-            return CardInfo.Rarity.Common;
+            return CardInfo.Rarity.Rare;
         }
 
         protected override CardInfoStat[] GetStats()
