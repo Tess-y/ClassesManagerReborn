@@ -29,7 +29,7 @@ namespace ClassesManagerReborn
     {
         private const string ModId = "root.classes.manager.reborn";
         private const string ModName = "Classes Manager Reborn";
-        public const string Version = "1.1.7";
+        public const string Version = "1.1.9";
         public const string ModInitials = "CMR";
 
         public static ClassesManager instance { get; private set; }
@@ -99,7 +99,7 @@ namespace ClassesManagerReborn
 
             Unbound.RegisterHandshake(ModId, this.OnHandShakeCompleted);
 
-            Unbound.RegisterMenu(ModName, delegate () { }, new Action<GameObject>(this.NewGUI), null, true);
+            Unbound.RegisterMenu(ModName, delegate () { }, new Action<GameObject>(this.NewGUI), null, false);
 
 
             //instance.ExecuteAfterFrames(10, TestMode);
@@ -156,14 +156,16 @@ namespace ClassesManagerReborn
 
         public static System.Collections.IEnumerator CleanupClasses(IGameModeHandler gm)
         {
+            List<Task> tasks = new List<Task>();
             foreach (Player player in PlayerManager.instance.players)
             {
-                CleanupClassCards(player);
+                tasks.Add(new Task(CleanupClassCards(player)));
             }
+            while (tasks.Any(t => t.Running)) yield return null;
             yield break;
         }
 
-        internal static void CleanupClassCards(Player player)
+        internal static System.Collections.IEnumerator CleanupClassCards(Player player)
         {
             List<CardInfo> cards = player.data.currentCards.ToList();
             bool eddited = false;
@@ -185,6 +187,7 @@ namespace ClassesManagerReborn
                 ModdingUtils.Utils.Cards.instance.RemoveAllCardsFromPlayer(player);
                 ModdingUtils.Utils.Cards.instance.AddCardsToPlayer(player, cards.ToArray(), true, addToCardBar: true);
             }
+            yield break;
         }
 
         /// <summary>
