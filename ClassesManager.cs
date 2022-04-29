@@ -41,8 +41,6 @@ namespace ClassesManagerReborn
         public static ConfigEntry<bool> Class_War;
         public static ConfigEntry<float> Class_Odds;
 
-        internal static CardInfo jackCard = null;
-
         internal MethodBase GetRelativeRarity;
 
         internal System.Collections.IEnumerator InstantiateModClasses()
@@ -66,7 +64,7 @@ namespace ClassesManagerReborn
             tasks.Clear();
             foreach (ClassHandler h in handlers) tasks.Add(new Task(h.PostInit()));
             while (tasks.Any(t => t.Running)) yield return null;
-            Debug("Class setupCompleate", true);
+            Debug("Class Setup Complete", true);
         }
 
         void Awake()
@@ -107,10 +105,12 @@ namespace ClassesManagerReborn
             //instance.ExecuteAfterFrames(10, TestMode);
             instance.StartCoroutine(InstantiateModClasses());
 
+            GameModeManager.AddHook(GameModeHooks.HookGameStart, CleanupClasses);
             GameModeManager.AddHook(GameModeHooks.HookPlayerPickEnd, CleanupClasses);
             GameModeManager.AddHook(GameModeHooks.HookPickEnd, CleanupClasses);
 
-            CustomCard.BuildCard<Cards.JACK>(card => jackCard = card);
+            CustomCard.BuildCard<Cards.JACK>(card => Cards.JACK.card = card);
+            CustomCard.BuildCard<Cards.MasteringTrade>(card => Cards.MasteringTrade.card = card);
         }
 
         private void OnHandShakeCompleted()
@@ -155,10 +155,26 @@ namespace ClassesManagerReborn
             }
         }
 
+        public static System.Collections.IEnumerator OnGameStart(IGameModeHandler gm)
+        {
+            Cards.MasteringTrade.masteringPlayers = new List<Player>();
+            yield break;
+        }
 
         public static System.Collections.IEnumerator CleanupClasses(IGameModeHandler gm)
         {
             List<Task> tasks = new List<Task>();
+            if (Cards.MasteringTrade.masteringPlayers.Count > 0)
+            {
+                foreach (var player in Cards.MasteringTrade.masteringPlayers)
+                {
+                    tasks.Add(new Task(Cards.MasteringTrade.IAddClassCards(player)));
+                }
+                Cards.MasteringTrade.masteringPlayers.Clear();
+            }
+            while (tasks.Any(t => t.Running)) yield return null;
+            tasks.Clear();
+
             foreach (Player player in PlayerManager.instance.players)
             {
                 tasks.Add(new Task(CleanupClassCards(player)));
