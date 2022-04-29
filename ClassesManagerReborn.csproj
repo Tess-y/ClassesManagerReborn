@@ -3,56 +3,50 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
-    <RootNamespace>ClassesManagerReborn</RootNamespace>
   </PropertyGroup>
-	
-  <PropertyGroup>
-    <RoundsFolder>D:\Program Files (x86)\Steam\steamapps\common\ROUNDS</RoundsFolder>
-  </PropertyGroup>
-	
-  <ItemGroup>
-    <PackageReference Include="UnboundLib" Version="2.10.2" />
-  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="0Harmony">
-		<HintPath>$(RoundsFolder)\BepInEx\core\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="BepInEx">
-      <HintPath>$(RoundsFolder)\BepInEx\core\BepInEx.dll</HintPath>
-    </Reference>
-    <Reference Include="CardChoiceSpawnUniqueCardPatch">
-      <HintPath>$(RoundsFolder)\BepInEx\plugins\CardChoiceSpawnUniqueCardPatch.dll</HintPath>
-    </Reference>
-    <Reference Include="DeckCustomization">
-      <HintPath>$(RoundsFolder)\BepInEx\plugins\DeckCustomization.dll</HintPath>
-    </Reference>
-    <Reference Include="MMHOOK_Assembly-CSharp">
-      <HintPath>$(RoundsFolder)\BepInEx\plugins\MMHOOK_Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="ModdingUtils">
-      <HintPath>$(RoundsFolder)\BepInEx\plugins\ModdingUtils.dll</HintPath>
+      <HintPath>C:\Users\Tess\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Simple_Gamemodes\BepInEx\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>$(RoundsFolder)\Rounds_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\ROUNDS\Rounds_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="BepInEx">
+      <HintPath>C:\Users\Tess\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Simple_Gamemodes\BepInEx\core\BepInEx.dll</HintPath>
+    </Reference>
+    <Reference Include="CardChoiceSpawnUniqueCardPatch">
+      <HintPath>C:\Users\Tess\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\modding\BepInEx\plugins\Pykess-CardChoiceSpawnUniqueCardPatch\CardChoiceSpawnUniqueCardPatch.dll</HintPath>
+    </Reference>
+    <Reference Include="DeckCustomization">
+      <HintPath>C:\Users\Tess\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\modding\BepInEx\plugins\Pykess-Deck_Customization\DeckCustomization.dll</HintPath>
+    </Reference>
+    <Reference Include="MMHOOK_Assembly-CSharp">
+      <HintPath>C:\Users\Tess\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Simple_Gamemodes\BepInEx\plugins\willis81808-MMHook\MMHOOK_Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="ModdingUtils">
+      <HintPath>C:\Users\Tess\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Simple_Gamemodes\BepInEx\plugins\Pykess-ModdingUtils\ModdingUtils.dll</HintPath>
     </Reference>
     <Reference Include="PhotonRealtime">
-      <HintPath>$(RoundsFolder)\Rounds_Data\Managed\PhotonRealtime.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\ROUNDS\Rounds_Data\Managed\PhotonRealtime.dll</HintPath>
     </Reference>
     <Reference Include="PhotonUnityNetworking">
-      <HintPath>$(RoundsFolder)\Rounds_Data\Managed\PhotonUnityNetworking.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\ROUNDS\Rounds_Data\Managed\PhotonUnityNetworking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnboundLib">
+      <HintPath>C:\Users\Tess\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Simple_Gamemodes\BepInEx\plugins\willis81808-UnboundLib\UnboundLib.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>$(RoundsFolder)\Rounds_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\ROUNDS\Rounds_Data\Managed\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>$(RoundsFolder)\Rounds_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\ROUNDS\Rounds_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(RoundsFolder)\Rounds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\ROUNDS\Rounds_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>$(RoundsFolder)\Rounds_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>F:\SteamLibrary\steamapps\common\ROUNDS\Rounds_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
 
