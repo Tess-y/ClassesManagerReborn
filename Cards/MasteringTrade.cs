@@ -24,14 +24,14 @@ namespace ClassesManagerReborn.Cards
 
         internal static IEnumerator IAddClassCards(Player player)
         {
-            ClassObject[] classObjects = ClassesRegistry.Registry.Values.Where(classObj => ModdingUtils.Utils.Cards.instance.PlayerIsAllowedCard(player, classObj.card)).ToArray();
+            ClassObject[] classObjects = ClassesRegistry.GetClassObjects(~CardType.NonClassCard & ~CardType.Entry).Where(classObj => ModdingUtils.Utils.Cards.instance.PlayerIsAllowedCard(player, classObj.card)).ToArray();
 
             foreach (var classObj in classObjects)
             {
                 UnityEngine.Debug.Log(classObj.card.cardName);
             }
 
-            List<CardInfo> classes = ClassesRegistry.Registry.Values.Select(obj => obj.card).Intersect(player.data.currentCards).Distinct().ToList();
+            List<CardInfo> classes = ClassesRegistry.GetClassObjects(~CardType.NonClassCard & ~CardType.Card).Select(obj => obj.card).Intersect(player.data.currentCards).Distinct().ToList();
 
             classes = classes.Where(card => { 
                 return classObjects.Any(classObj => { 
@@ -74,7 +74,6 @@ namespace ClassesManagerReborn.Cards
 
                 cardCount = player.data.currentCards.Count();
 
-                ModdingUtils.Utils.Cards.instance.AddCardToPlayer(player, card, false, "", 2f, 2f, true);
 
                 yield return new WaitUntil(() =>
                 {
