@@ -99,26 +99,26 @@ namespace ClassesManagerReborn
         /// <summary>
         /// <para>The entry point of a class, normally players can only have one Entry card.</para>
         /// </summary>
-        Entry = 0x1,
+        Entry = 1,
         /// <summary>
         /// <para>The entry point of a subclass, normally players can only have one SubClass card.</para>
         /// </summary>
-        SubClass = 0x2,
+        SubClass = 2,
         /// <summary>
         /// <para>Indicates a decision point on a card tree.</para>
         /// </summary>
-        Branch = 0x4,
+        Branch = 4,
         /// <summary>
         /// <para>Indicates a card that locks other cards behind it.</para>
         /// </summary>
-        Gate = 0x8,
+        Gate = 8,
         /// <summary>
         /// <para>Indicates a card that is the last node in a branch.</para>
         /// </summary>
-        Card = 0x16,
+        Card = 16,
         /// <summary>
         /// <para>Marks a card that should be ingnored by cards that care about classes.</para>
         /// </summary>
-        NonClassCard = 0x32,
+        NonClassCard = 32,
     }
 }
