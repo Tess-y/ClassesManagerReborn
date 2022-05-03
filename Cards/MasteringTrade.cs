@@ -24,7 +24,7 @@ namespace ClassesManagerReborn.Cards
 
         internal static IEnumerator IAddClassCards(Player player)
         {
-            ClassObject[] classObjects = ClassesRegistry.Registry.Values.Where(classObj => ModdingUtils.Utils.Cards.instance.PlayerIsAllowedCard(player, classObj.card)).ToArray();
+            ClassObject[] classObjects = ClassesRegistry.GetClassObjects(~CardType.NonClassCard & ~CardType.Entry).Where(classObj => ModdingUtils.Utils.Cards.instance.PlayerIsAllowedCard(player, classObj.card)).ToArray();
 
             foreach (var classObj in classObjects)
             {
@@ -76,14 +76,14 @@ namespace ClassesManagerReborn.Cards
 
                 ModdingUtils.Utils.Cards.instance.AddCardToPlayer(player, card, false, "", 2f, 2f, true);
 
-                yield return new WaitUntil(() =>
-                {
-                    return ((player.data.currentCards.Count > cardCount) || (player.data.currentCards[player.data.currentCards.Count-1] == card));
-                });
+                //yield return new WaitUntil(() =>
+                //{
+                //    return ((player.data.currentCards.Count > cardCount) || (player.data.currentCards[player.data.currentCards.Count-1] == card));
+                //});
 
                 int i = 0;
 
-                while (i++ < 10)
+                while (i++ < 20)
                 {
                     yield return null;
                 }
