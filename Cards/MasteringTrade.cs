@@ -24,7 +24,7 @@ namespace ClassesManagerReborn.Cards
 
         internal static IEnumerator IAddClassCards(Player player)
         {
-            ClassObject[] classObjects = ClassesRegistry.GetClassObjects(~CardType.NonClassCard & ~CardType.Entry).Where(classObj => ModdingUtils.Utils.Cards.instance.PlayerIsAllowedCard(player, classObj.card)).ToArray();
+            ClassObject[] classObjects = ClassesRegistry.GetClassObjects(~CardType.Entry).Where(classObj => ModdingUtils.Utils.Cards.instance.PlayerIsAllowedCard(player, classObj.card) && ModdingUtils.Utils.Cards.active.Contains(classObj.card)).ToArray();
 
             foreach (var classObj in classObjects)
             {
