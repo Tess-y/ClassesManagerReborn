@@ -76,10 +76,13 @@ namespace ClassesManagerReborn.Cards
 
                 ModdingUtils.Utils.Cards.instance.AddCardToPlayer(player, card, false, "", 2f, 2f, true);
 
-                //yield return new WaitUntil(() =>
-                //{
-                //    return ((player.data.currentCards.Count > cardCount) || (player.data.currentCards[player.data.currentCards.Count-1] == card));
-                //});
+                var time = 0f;
+
+                yield return new WaitUntil(() =>
+                {
+                    time += Time.deltaTime;
+                    return ((player.data.currentCards.Count > cardCount) || (player.data.currentCards[player.data.currentCards.Count - 1] == card) || (time > 5f));
+                });
 
                 int i = 0;
 
