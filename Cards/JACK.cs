@@ -5,6 +5,7 @@ using UnboundLib.Cards;
 using UnityEngine;
 using ModdingUtils.Extensions;
 using UnboundLib;
+using System.Linq;
 
 namespace ClassesManagerReborn.Cards
 {
@@ -19,7 +20,7 @@ namespace ClassesManagerReborn.Cards
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
         {
             ClassesManager.instance.ExecuteAfterFrames(2, () => { 
-                List<CardInfo> classes = ClassesRegistry.GetClassInfos(CardType.Entry);
+                List<CardInfo> classes = ClassesRegistry.GetClassInfos(CardType.Entry).Intersect(ModdingUtils.Utils.Cards.active).ToList();
                 foreach (CardInfo card in classes)
                 {
                     if(!player.data.currentCards.Contains(card))

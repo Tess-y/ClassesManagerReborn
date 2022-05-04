@@ -29,7 +29,7 @@ namespace ClassesManagerReborn
     {
         private const string ModId = "root.classes.manager.reborn";
         private const string ModName = "Classes Manager Reborn";
-        public const string Version = "1.1.13";
+        public const string Version = "1.2.0";
         public const string ModInitials = "CMR";
 
         public static ClassesManager instance { get; private set; }
@@ -41,6 +41,8 @@ namespace ClassesManagerReborn
         public static ConfigEntry<bool> Class_War;
         public static ConfigEntry<float> Class_Odds;
 
+        internal static bool firstHand = true;
+        internal static int cardsToDraw = 0;
         internal MethodBase GetRelativeRarity;
 
         internal System.Collections.IEnumerator InstantiateModClasses()
@@ -105,7 +107,7 @@ namespace ClassesManagerReborn
             //instance.ExecuteAfterFrames(10, TestMode);
             instance.StartCoroutine(InstantiateModClasses());
 
-            GameModeManager.AddHook(GameModeHooks.HookGameStart, CleanupClasses);
+            GameModeManager.AddHook(GameModeHooks.HookGameStart, OnGameStart);
             GameModeManager.AddHook(GameModeHooks.HookPlayerPickEnd, CleanupClasses);
             GameModeManager.AddHook(GameModeHooks.HookPickEnd, CleanupClasses);
 
@@ -137,9 +139,9 @@ namespace ClassesManagerReborn
 
             MenuHandler.CreateToggle(Force_Class.Value, "Enable Force Classes", menu, value => Force_Class.Value = value);
             MenuHandler.CreateToggle(Ignore_Blacklist.Value, "Allow more then one class and subclass per player", menu, value => Ignore_Blacklist.Value = value);
-            MenuHandler.CreateToggle(Ensure_Class_Card.Value, "Guarantee players in a class will draw a card for that class if able (NOT YET IMPLMENTED)", menu, value => Ensure_Class_Card.Value = value);
+            MenuHandler.CreateToggle(Ensure_Class_Card.Value, "Guarantee players in a class will draw a card for that class if able", menu, value => Ensure_Class_Card.Value = value);
             MenuHandler.CreateToggle(Class_War.Value, "Prevent players from having the same class", menu, value => Class_War.Value = value);
-            MenuHandler.CreateSlider("Increase the chances of a class restricted card to show up (Intended for large packs)", menu, 30, 1, 10, Class_Odds.Value, value => Class_Odds.Value = value, out UnityEngine.UI.Slider _);
+            MenuHandler.CreateSlider("Increase the chances of a class restricted card to show up (Intended for large packs)", menu, 30, 1, 100, Class_Odds.Value, value => Class_Odds.Value = value, out UnityEngine.UI.Slider _);
 
 
             MenuHandler.CreateText("", menu, out _);
@@ -158,11 +160,14 @@ namespace ClassesManagerReborn
         public static System.Collections.IEnumerator OnGameStart(IGameModeHandler gm)
         {
             Cards.MasteringTrade.masteringPlayers = new List<Player>();
+            firstHand = true;
+            cardsToDraw = 0;
             yield break;
         }
 
         public static System.Collections.IEnumerator CleanupClasses(IGameModeHandler gm)
         {
+            firstHand = false;
             List<Task> tasks = new List<Task>();
             if (Cards.MasteringTrade.masteringPlayers.Count > 0)
             {
@@ -189,7 +194,7 @@ namespace ClassesManagerReborn
             bool eddited = false;
             for(int i = 0; i < cards.Count; ++i)
             {
-                if (ClassesRegistry.Registry.ContainsKey(cards[i]))
+                if (ClassesRegistry.Registry.ContainsKey(cards[i]) && (ClassesRegistry.Registry[cards[i]].type & CardType.NonClassCard) == 0)
                 {
                     CardInfo? requriment = ClassesRegistry.Registry[cards[i]].GetMissingClass(player);
                     if (requriment != null)

@@ -16,7 +16,7 @@ namespace ClassesManagerReborn
         private List<CardInfo> whiteList = new List<CardInfo>();
 
         ///The list of Class or Subclass cards a player can have while still bein eligable for this Class/Subclass
-        public List<CardInfo> WhiteList { get { if (((CardType.Card | CardType.Branch) & type) != 0) return null; if (whitelistAll) return ClassesRegistry.GetClassInfos(type); return whiteList; } }
+        public List<CardInfo> WhiteList { get { if (((CardType.SubClass | CardType.Entry) & type) == 0) return null; if (whitelistAll) return ClassesRegistry.GetClassInfos(type); return whiteList; } }
         ///The list of extra cards that make a player unable to get this card.
         public List<CardInfo> BlackList { get { return blackList.ToList(); } }
 
@@ -94,29 +94,32 @@ namespace ClassesManagerReborn
             {
                 return false;
             }
-            if (ClassesManager.Class_War.Value && type == CardType.Entry)
+            if ((type & CardType.NonClassCard) == 0)
             {
-                foreach(Player p in PlayerManager.instance.players)
+                if (ClassesManager.Class_War.Value && (type & CardType.Entry) != 0)
                 {
-                    if (p.playerID != playerID && p.data.currentCards.Contains(card)) return false;
+                    foreach (Player p in PlayerManager.instance.players)
+                    {
+                        if (p.playerID != playerID && p.data.currentCards.Contains(card)) return false;
+                    }
+                }
+                if (!ClassesManager.Ignore_Blacklist.Value && !whitelistAll && ((CardType.Entry | CardType.SubClass) & type) != 0)
+                {
+                    if (whiteList.Any())
+                    {
+                        if (currentCards.Where(c => !whiteList.Contains(c)).Intersect(ClassesRegistry.GetClassInfos(type)).Any()) return false;
+                    }
+                    else
+                    {
+                        if (currentCards.Intersect(ClassesRegistry.GetClassInfos(type)).Any()) return false;
+                    }
                 }
             }
             if (blackList.Any())
             {
                 if (currentCards.Where(c => blackList.Contains(c)).Any()) return false;
             }
-            if (!ClassesManager.Ignore_Blacklist.Value && !whitelistAll && ((CardType.Entry | CardType.SubClass) & type) != 0)
-            {
-                if (whiteList.Any())
-                {
-                    if (currentCards.Where(c => !whiteList.Contains(c)).Intersect(ClassesRegistry.GetClassInfos(type)).Any()) return false;
-                }
-                else
-                {
-                    if (currentCards.Intersect(ClassesRegistry.GetClassInfos(type)).Any()) return false;
-                }
-            }
-            if (type == CardType.Entry) return true;
+            if ((type & CardType.Entry) != 0) return true;
             foreach(CardInfo[] RequiredClassTree in RequiredClassesTree)
             {
                 bool flag = true;
