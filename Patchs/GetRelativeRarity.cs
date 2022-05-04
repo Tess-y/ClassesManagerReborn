@@ -11,7 +11,7 @@ namespace ClassesManagerReborn.Patchs
     {
         public static void PostfixMthod(ref float __result, CardInfo card)
         {
-            if(ClassesRegistry.Registry.ContainsKey(card) && ClassesRegistry.Registry[card].RequiredClassesTree[0].Length != 0 )
+            if(ClassesRegistry.Registry.ContainsKey(card) && ClassesRegistry.Registry[card].RequiredClassesTree[0].Length != 0 && (ClassesRegistry.Registry[card].type & CardType.NonClassCard) == 0)
             {
                 __result *= ClassesManager.Class_Odds.Value;
             }
