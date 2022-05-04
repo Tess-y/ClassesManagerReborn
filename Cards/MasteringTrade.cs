@@ -31,7 +31,7 @@ namespace ClassesManagerReborn.Cards
                 UnityEngine.Debug.Log(classObj.card.cardName);
             }
 
-            List<CardInfo> classes = ClassesRegistry.Registry.Values.Select(obj => obj.card).Intersect(player.data.currentCards).Distinct().ToList();
+            List<CardInfo> classes = ClassesRegistry.GetClassObjects(~CardType.Card).Select(obj => obj.card).Intersect(player.data.currentCards).Distinct().ToList();
 
             classes = classes.Where(card => { 
                 return classObjects.Any(classObj => { 

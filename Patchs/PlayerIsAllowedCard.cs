@@ -12,6 +12,9 @@ namespace ClassesManagerReborn.Patchs
     {
         public static void Postfix(ref bool __result, Player player, CardInfo card)
         {
+            if (card == Cards.JACK.card || card == Cards.MasteringTrade.card)
+                if (ClassesRegistry.GetClassObjects(~CardType.Entry).Count == 0)
+                    __result = false;
             if (!__result) return;
             if (ClassesRegistry.Registry.ContainsKey(card))
             {
