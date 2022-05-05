@@ -29,7 +29,7 @@ namespace ClassesManagerReborn
     {
         private const string ModId = "root.classes.manager.reborn";
         private const string ModName = "Classes Manager Reborn";
-        public const string Version = "1.2.2";
+        public const string Version = "1.2.3";
         public const string ModInitials = "CMR";
 
         public static ClassesManager instance { get; private set; }
@@ -81,6 +81,10 @@ namespace ClassesManagerReborn
             GetRelativeRarity = typeof(DeckCustomization.DeckCustomization).Assembly.GetType("DeckCustomization.RarityUtils").GetMethod("GetRelativeRarity", BindingFlags.NonPublic | BindingFlags.Static, null, new Type[] { typeof(CardInfo) },null);
             HarmonyMethod GetRelativeRarity_Postfix = new HarmonyMethod(typeof(Patchs.GetRelativeRarity).GetMethod(nameof(Patchs.GetRelativeRarity.PostfixMthod)));
             harmony.Patch(GetRelativeRarity, postfix: GetRelativeRarity_Postfix);
+
+            MethodBase GetRarityAsPerc = typeof(DeckCustomization.DeckCustomization).Assembly.GetType("DeckCustomization.RarityUtils").GetMethod("GetRarityAsPerc", BindingFlags.NonPublic | BindingFlags.Static, null, new Type[] { typeof(CardInfo) }, null);
+            HarmonyMethod GetRarityAsPerc_Postfix = new HarmonyMethod(typeof(Patchs.GetRarityAsPerc).GetMethod(nameof(Patchs.GetRarityAsPerc.PostfixMthod)));
+            harmony.Patch(GetRarityAsPerc, postfix: GetRarityAsPerc_Postfix);
 
             MethodBase EfficientGetRandomCard = typeof(DeckCustomization.DeckCustomization).Assembly.GetType("DeckCustomization.GetRandomCard").GetMethod("Efficient", BindingFlags.NonPublic | BindingFlags.Static);
             HarmonyMethod EfficientGetRandomCard_Prefix = new HarmonyMethod(typeof(Patchs.EfficientGetRandomCard).GetMethod(nameof(Patchs.EfficientGetRandomCard.PrefixMthod)));

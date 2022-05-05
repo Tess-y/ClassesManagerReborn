@@ -15,10 +15,10 @@ namespace ClassesManagerReborn.Cards
         internal static CardInfo card;
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers)
         {
-            Color color = new Color(1, 1, 0, 1);
+            gameObject.AddComponent<Util.Legend>();
             var cardstuffs = gameObject.AddComponent<Util.ClassNameMono>();
-            cardstuffs.color1 = color;
-            cardstuffs.color2 = color;
+            cardstuffs.color1 = Util.Legend.color;
+            cardstuffs.color2 = Util.Legend.color;
             cardstuffs.className = "";
             cardInfo.allowMultiple = false;
             cardInfo.GetAdditionalData().canBeReassigned = false;
