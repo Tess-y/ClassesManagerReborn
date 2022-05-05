@@ -83,9 +83,19 @@ namespace ClassesManagerReborn
             return Registry.Values.Where(v => (type & v.type) != 0 && ((v.type & CardType.NonClassCard) == 0 || includeNonClass)).ToList();
         }
 
+        public static List<ClassObject> GetClassObjects(CardType type, CardType excluded, bool includeNonClass = false)
+        {
+            return Registry.Values.Where(v => ((type & v.type) != 0) && ((excluded & v.type) == 0) && ((v.type & CardType.NonClassCard) == 0 || includeNonClass)).ToList();
+        }
+
         public static List<CardInfo> GetClassInfos(CardType type, bool includeNonClass = false)
         {
             return Registry.Values.Where(v => (type & v.type) != 0 && ((v.type & CardType.NonClassCard) == 0 || includeNonClass)).Select<ClassObject,CardInfo>(v => v.card).ToList();
+        }
+
+        public static List<CardInfo> GetClassInfos(CardType type, CardType excluded, bool includeNonClass = false)
+        {
+            return Registry.Values.Where(v => ((type & v.type) != 0) && ((excluded & v.type) == 0) && ((v.type & CardType.NonClassCard) == 0 || includeNonClass)).Select<ClassObject, CardInfo>(v => v.card).ToList();
         }
 
     }

@@ -6,6 +6,7 @@ using UnityEngine;
 using ModdingUtils.Extensions;
 using UnboundLib;
 using System.Linq;
+using UnityEngine.UI;
 
 namespace ClassesManagerReborn.Cards
 {
@@ -14,6 +15,7 @@ namespace ClassesManagerReborn.Cards
         internal static CardInfo card;
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers)
         {
+            gameObject.AddComponent<legend>();
             cardInfo.allowMultiple = false;
             cardInfo.GetAdditionalData().canBeReassigned = false;
         }
@@ -44,7 +46,7 @@ namespace ClassesManagerReborn.Cards
             return CardInfo.Rarity.Rare;
         }
 
-        protected override CardInfoStat[] GetStats()
+        protected override CardInfoStat[] GetStats() 
         {
             return new CardInfoStat[] { };
         }
@@ -62,6 +64,29 @@ namespace ClassesManagerReborn.Cards
         public override string GetModName()
         {
             return "CMR";
+        }
+
+    }
+    internal class legend : MonoBehaviour
+    {
+        public void Update()
+        {
+            FindObjectsInChildren(gameObject, "Triangle").ForEach(t => t.GetComponent<Image>().color = new Color(1, 1, 0, 1));
+        }
+
+        public static List<GameObject> FindObjectsInChildren(GameObject gameObject, string gameObjectName)
+        {
+            List<GameObject> returnObjects = new List<GameObject>();
+            Transform[] children = gameObject.GetComponentsInChildren<Transform>(true);
+            foreach (Transform item in children)
+            {
+                if (item.gameObject.name.Equals(gameObjectName))
+                {
+                    returnObjects.Add(item.gameObject);
+                }
+            }
+
+            return returnObjects;
         }
     }
 }
