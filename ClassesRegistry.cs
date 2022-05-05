@@ -74,6 +74,7 @@ namespace ClassesManagerReborn
         /// <returns>The class object associated with the card, or null if it's not registered.</returns>
         public static ClassObject Get(CardInfo card)
         {
+            if(card == null) return null;
             if (Registry.ContainsKey(card)) return Registry[card];
             return null;
         }

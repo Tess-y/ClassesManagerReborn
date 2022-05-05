@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ClassesManagerReborn.Util
 {
@@ -20,10 +21,30 @@ namespace ClassesManagerReborn.Util
     /// </summary>
     public class ClassNameMono : MonoBehaviour
     {
+        /// <summary>
+        /// The text that will appear in the lower right hand corner of the card.
+        /// </summary>
         public string className = "Class";
+        /// <summary>
+        /// The color the top 2 corners of Class cards will be (Black to disable)
+        /// </summary>
+        public Color ClassDefult = new Color(53 / 255f, 196 / 255f, 10 / 255f, 1);
+        /// <summary>
+        /// The color the top 2 corners of SubClass cards will be (Black to disable)
+        /// </summary>
+        public Color SubClassDefult = new Color(0.7f, 0.33f, .05f, 1);
+        /// <summary>
+        /// The color the top 2 corners of the card will be (Black for defualt)
+        /// </summary>
+        public Color color1 = Color.black;
+        /// <summary>
+        /// The color the Botton 2 corners of the card will be (Black for defualt)
+        /// </summary>
+        public Color color2 = Color.black;
+        private CardInfo card;
         private void Start()
         {
-            var card = gameObject.GetComponent<CardInfo>();
+            card = gameObject.GetComponent<CardInfo>();
             var allChildrenRecursive = gameObject.GetComponentsInChildren<RectTransform>();
             var BottomLeftCorner = allChildrenRecursive.Where(obj => obj.gameObject.name == "EdgePart (1)")
                 .FirstOrDefault().gameObject;
@@ -42,6 +63,47 @@ namespace ClassesManagerReborn.Util
             modNameObj.transform.Rotate(0f, 0f, 135f);
             modNameObj.transform.localScale = new Vector3(1f, 1f, 1f);
             modNameObj.transform.localPosition = new Vector3(-50f, -50f, 0f);
+        }
+
+        private void Update()
+        {
+            if (ClassesRegistry.Get(card.sourceCard) != null && (ClassesRegistry.Get(card.sourceCard).type & CardType.NonClassCard) == 0)
+            {
+                if ( (ClassesRegistry.Get(card.sourceCard).type & CardType.Entry) != 0)
+                    color1 = ClassDefult;
+                if ((ClassesRegistry.Get(card.sourceCard).type & CardType.SubClass) != 0)
+                    color1 = SubClassDefult;
+            }
+            List<GameObject> triangles = FindObjectsInChildren(gameObject, "Triangle");
+            bool up = true;
+            int counter = 1;
+            for (int i = 0; i < triangles.Count; i++)
+            {
+                if (++counter > 2) { up = !up; counter = 1; }
+                if (up && color1 != Color.black)
+                {
+                    triangles[i].GetComponent<Image>().color = color1;
+                }
+                if (!up && color2 != Color.black)
+                {
+                    triangles[i].GetComponent<Image>().color = color2;
+                }
+            }
+        }
+
+        public static List<GameObject> FindObjectsInChildren(GameObject gameObject, string gameObjectName)
+        {
+            List<GameObject> returnObjects = new List<GameObject>();
+            Transform[] children = gameObject.GetComponentsInChildren<Transform>(true);
+            foreach (Transform item in children)
+            {
+                if (item.gameObject.name.Equals(gameObjectName))
+                {
+                    returnObjects.Add(item.gameObject);
+                }
+            }
+
+            return returnObjects;
         }
     }
 }
