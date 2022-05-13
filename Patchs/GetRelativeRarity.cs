@@ -17,6 +17,7 @@ namespace ClassesManagerReborn.Patchs
         {
             if (ClassesRegistry.Registry.ContainsKey(card) && ClassesRegistry.Registry[card].RequiredClassesTree[0].Length != 0 && (ClassesRegistry.Registry[card].type & CardType.NonClassCard) == 0)
             {
+                UnityEngine.Debug.Log($"hit on card {card.cardName}");
                 __result *= ClassesManager.Class_Odds.Value;
             }
             else if (card.GetComponent<Util.Legend>() != null)

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ClassesManagerReborn.Util
 {
-    internal class Legend : MonoBehaviour
+    public class Legend : MonoBehaviour
     {
         public static Color color = new Color(1, 1, 0, 1);
         public void Update()
