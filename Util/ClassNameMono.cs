@@ -44,51 +44,58 @@ namespace ClassesManagerReborn.Util
         private CardInfo card;
         private void Start()
         {
-            card = gameObject.GetComponent<CardInfo>();
-            var allChildrenRecursive = gameObject.GetComponentsInChildren<RectTransform>();
-            var BottomLeftCorner = allChildrenRecursive.Where(obj => obj.gameObject.name == "EdgePart (1)")
-                .FirstOrDefault().gameObject;
-            var modNameObj =
-                Instantiate(new GameObject("ExtraCardText", typeof(TextMeshProUGUI), typeof(DestroyOnUnParent)),
-                    BottomLeftCorner.transform.position, BottomLeftCorner.transform.rotation,
-                    BottomLeftCorner.transform);
-            var modText = modNameObj.gameObject.GetComponent<TextMeshProUGUI>();
+            try
+            {
+                card = gameObject.GetComponent<CardInfo>();
+                var allChildrenRecursive = gameObject.GetComponentsInChildren<RectTransform>();
+                var BottomLeftCorner = allChildrenRecursive.Where(obj => obj.gameObject.name == "EdgePart (1)")
+                    .FirstOrDefault().gameObject;
+                var modNameObj =
+                    Instantiate(new GameObject("ExtraCardText", typeof(TextMeshProUGUI), typeof(DestroyOnUnParent)),
+                        BottomLeftCorner.transform.position, BottomLeftCorner.transform.rotation,
+                        BottomLeftCorner.transform);
+                var modText = modNameObj.gameObject.GetComponent<TextMeshProUGUI>();
 
-            modText.text = className;
-            modText.enableWordWrapping = false;
-            modText.alignment = TextAlignmentOptions.Bottom;
-            modText.alpha = 0.1f;
-            modText.fontSize = 50;
+                modText.text = className;
+                modText.enableWordWrapping = false;
+                modText.alignment = TextAlignmentOptions.Bottom;
+                modText.alpha = 0.1f;
+                modText.fontSize = 50;
 
-            modNameObj.transform.Rotate(0f, 0f, 135f);
-            modNameObj.transform.localScale = new Vector3(1f, 1f, 1f);
-            modNameObj.transform.localPosition = new Vector3(-50f, -50f, 0f);
+                modNameObj.transform.Rotate(0f, 0f, 135f);
+                modNameObj.transform.localScale = new Vector3(1f, 1f, 1f);
+                modNameObj.transform.localPosition = new Vector3(-50f, -50f, 0f);
+            }catch { }
         }
 
         private void Update()
         {
-            if (ClassesRegistry.Get(card.sourceCard) != null && (ClassesRegistry.Get(card.sourceCard).type & CardType.NonClassCard) == 0)
+            try
             {
-                if ( (ClassesRegistry.Get(card.sourceCard).type & CardType.Entry) != 0)
-                    color1 = ClassDefult;
-                if ((ClassesRegistry.Get(card.sourceCard).type & CardType.SubClass) != 0)
-                    color1 = SubClassDefult;
-            }
-            List<GameObject> triangles = FindObjectsInChildren(gameObject, "Triangle");
-            bool up = true;
-            int counter = 1;
-            for (int i = 0; i < triangles.Count; i++)
-            {
-                if (++counter > 2) { up = !up; counter = 1; }
-                if (up && color1 != Color.black)
+                if (ClassesRegistry.Get(card.sourceCard) != null && (ClassesRegistry.Get(card.sourceCard).type & CardType.NonClassCard) == 0)
                 {
-                    triangles[i].GetComponent<Image>().color = color1;
+                    if ((ClassesRegistry.Get(card.sourceCard).type & CardType.Entry) != 0)
+                        color1 = ClassDefult;
+                    if ((ClassesRegistry.Get(card.sourceCard).type & CardType.SubClass) != 0)
+                        color1 = SubClassDefult;
                 }
-                if (!up && color2 != Color.black)
+                List<GameObject> triangles = FindObjectsInChildren(gameObject, "Triangle");
+                bool up = true;
+                int counter = 1;
+                for (int i = 0; i < triangles.Count; i++)
                 {
-                    triangles[i].GetComponent<Image>().color = color2;
+                    if (++counter > 2) { up = !up; counter = 1; }
+                    if (up && color1 != Color.black)
+                    {
+                        triangles[i].GetComponent<Image>().color = color1;
+                    }
+                    if (!up && color2 != Color.black)
+                    {
+                        triangles[i].GetComponent<Image>().color = color2;
+                    }
                 }
             }
+            catch { }
         }
 
         public static List<GameObject> FindObjectsInChildren(GameObject gameObject, string gameObjectName)

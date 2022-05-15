@@ -15,12 +15,6 @@ namespace ClassesManagerReborn.Cards
         internal static CardInfo card;
         public override void SetupCard(CardInfo cardInfo, Gun gun, ApplyCardStats cardStats, CharacterStatModifiers statModifiers)
         {
-            gameObject.AddComponent<Util.Legend>();
-            var cardstuffs = gameObject.AddComponent<Util.ClassNameMono>();
-            cardstuffs.color1 = Util.Legend.color;
-            cardstuffs.color2 = Util.Legend.color;
-            cardstuffs.className = "";
-            cardInfo.allowMultiple = false;
             cardInfo.GetAdditionalData().canBeReassigned = false;
         }
         public override void OnAddCard(Player player, Gun gun, GunAmmo gunAmmo, CharacterData data, HealthHandler health, Gravity gravity, Block block, CharacterStatModifiers characterStats)
@@ -47,7 +41,7 @@ namespace ClassesManagerReborn.Cards
 
         protected override CardInfo.Rarity GetRarity()
         {
-            return CardInfo.Rarity.Rare;
+            return RarityLib.Utils.RarityUtils.GetRarity("Legendary");
         }
 
         protected override CardInfoStat[] GetStats() 

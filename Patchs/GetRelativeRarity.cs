@@ -17,12 +17,7 @@ namespace ClassesManagerReborn.Patchs
         {
             if (ClassesRegistry.Registry.ContainsKey(card) && ClassesRegistry.Registry[card].RequiredClassesTree[0].Length != 0 && (ClassesRegistry.Registry[card].type & CardType.NonClassCard) == 0)
             {
-                UnityEngine.Debug.Log($"hit on card {card.cardName}");
                 __result *= ClassesManager.Class_Odds.Value;
-            }
-            else if (card.GetComponent<Util.Legend>() != null)
-            {
-                __result /= 3f;
             }
         }
     }
@@ -36,9 +31,6 @@ namespace ClassesManagerReborn.Patchs
             float totalR = ((ObservableCollection<CardInfo>)typeof(CardManager).GetField("activeCards", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null))
                 .ToList().Select(c => (float)ClassesManager.instance.GetRelativeRarity.Invoke(null, new object[] { c })).Sum();
             __result = cardR / totalR;
-
-
-            UnityEngine.Debug.Log($"{__result}:{cardR}/{totalR}");
         }
     }
 }

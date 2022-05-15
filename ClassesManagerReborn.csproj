@@ -27,6 +27,9 @@
     <Reference Include="ModdingUtils">
       <HintPath>C:\Users\Tess\AppData\Roaming\Thunderstore Mod Manager\DataFolder\ROUNDS\profiles\Simple_Gamemodes\BepInEx\plugins\Pykess-ModdingUtils\ModdingUtils.dll</HintPath>
     </Reference>
+    <Reference Include="RarityLib">
+      <HintPath>I:\Rounds\repos\RarityLib\obj\Debug\netstandard2.1\RarityLib.dll</HintPath>
+    </Reference>
     <Reference Include="PhotonRealtime">
       <HintPath>F:\SteamLibrary\steamapps\common\ROUNDS\Rounds_Data\Managed\PhotonRealtime.dll</HintPath>
     </Reference>

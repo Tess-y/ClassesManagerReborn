@@ -6,17 +6,9 @@ using UnityEngine;
 
 namespace ClassesManagerReborn.Util
 {
+    [Obsolete("This object is no longer needed do to the advent of RarityLib and will be removed soon",false)]
     public class Legend : MonoBehaviour
     {
-        public static Color color = new Color(1, 1, 0, 1);
-        public void Update()
-        {
-            List<GameObject> rarityText = ClassNameMono.FindObjectsInChildren(gameObject, "RarityText(Clone)");
-            if(rarityText.Count > 0)
-            {
-                rarityText[0].GetComponent<TextMeshProUGUI>().color = color;
-                rarityText[0].GetComponent<TextMeshProUGUI>().text = rarityText[0].GetComponent<TextMeshProUGUI> ().text.Replace("Rare", "Legendary");
-            }
-        }
+        public static Color color = new Color(1, 1, 0, 1); 
     }
 }
