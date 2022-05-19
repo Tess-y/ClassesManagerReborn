@@ -21,6 +21,7 @@ namespace ClassesManagerReborn
     [BepInDependency("pykess.rounds.plugins.moddingutils", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.cardchoicespawnuniquecardpatch", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.deckcustomization", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInIncompatibility("fluxxfield.rounds.plugins.classesmanager")]
     // Declares our Mod to Bepin
     [BepInPlugin(ModId, ModName, Version)]
     // The game our Mod Is associated with

@@ -12,11 +12,11 @@ namespace ClassesManagerReborn.Patchs
     {
         public static void Postfix(ref bool __result, Player player, CardInfo card)
         {
+            if (!__result) return;
             if (player == null || card == null) return;
             if (card == Cards.JACK.card || card == Cards.MasteringTrade.card)
                 if (ClassesRegistry.GetClassObjects(~CardType.Entry).Count == 0)
                     __result = false;
-            if (!__result) return;
             if (ClassesRegistry.Registry.ContainsKey(card))
             {
                 __result = ClassesRegistry.Registry[card].PlayerIsAllowedCard(player);
@@ -29,4 +29,4 @@ namespace ClassesManagerReborn.Patchs
             }
         }
     }
-}
+} 
