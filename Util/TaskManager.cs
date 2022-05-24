@@ -64,6 +64,8 @@ namespace ClassesManagerReborn.Util
 			}
 		}
 
+		public string Name;
+
 		/// Delegate for termination subscribers.  manual is true if and only if
 		/// the coroutine was stopped with an explicit call to Stop().
 		public delegate void FinishedHandler(bool manual);
@@ -75,8 +77,9 @@ namespace ClassesManagerReborn.Util
 		///
 		/// If autoStart is true (default) the task is automatically started
 		/// upon construction.
-		public Task(IEnumerator c, bool autoStart = true)
+		public Task(IEnumerator c, bool autoStart = true, string name = "")
 		{
+			Name = name;
 			task = TaskManager.CreateTask(c);
 			task.Finished += TaskFinished;
 			if (autoStart)

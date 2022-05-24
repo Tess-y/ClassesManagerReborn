@@ -30,7 +30,7 @@ namespace ClassesManagerReborn
     {
         private const string ModId = "root.classes.manager.reborn";
         private const string ModName = "Classes Manager Reborn";
-        public const string Version = "1.2.6";
+        public const string Version = "1.2.9";
         public const string ModInitials = "CMR";
 
         public static ClassesManager instance { get; private set; }
@@ -59,14 +59,34 @@ namespace ClassesManagerReborn
                 {
                     ClassHandler handler = (ClassHandler)Activator.CreateInstance(type);
                     handlers.Add(handler);
-                    tasks.Add(new Task(handler.Init()));
+                    tasks.Add(new Task(handler.Init(), name: type.FullName));
                 }
                 
             }
-            while (tasks.Any(t => t.Running)) yield return null;
+            int counter = 0;
+            while (tasks.Any(t => t.Running)) { 
+                if(++counter == 20)foreach (Task task in tasks.Where(t => t.Running)) 
+                        UnityEngine.Debug.LogWarning($"ClassHanlder {task.Name} Init function is taking a long time to finish, this could be a bug.");
+                if (counter == 200) foreach (Task task in tasks.Where(t => t.Running))
+                    {
+                        task.Stop();
+                        UnityEngine.Debug.LogError($"ClassHanlder {task.Name} Init function has Faild, Skipping. This will cause unintended game play behavoir.");
+                    }
+                yield return null;  
+            }
             tasks.Clear();
-            foreach (ClassHandler h in handlers) tasks.Add(new Task(h.PostInit()));
-            while (tasks.Any(t => t.Running)) yield return null;
+            foreach (ClassHandler h in handlers) tasks.Add(new Task(h.PostInit(), name: h.GetType().FullName));
+            counter = 0;
+            while (tasks.Any(t => t.Running)) { 
+                if (++counter == 20) foreach (Task task in tasks.Where(t => t.Running)) 
+                        UnityEngine.Debug.LogWarning($"ClassHanlder {task.Name} PostInit function is taking a long time to finish, this could be a bug.");
+                if (counter == 200) foreach (Task task in tasks.Where(t => t.Running))
+                    {
+                        task.Stop();
+                        UnityEngine.Debug.LogError($"ClassHanlder {task.Name} PostInit function has Faild, Skipping. This will cause unintended game play behavoir.");
+                    }
+                yield return null;
+            }
             Debug("Class Setup Complete", true);
         }
 
