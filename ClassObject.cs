@@ -96,6 +96,8 @@ namespace ClassesManagerReborn
             }
             if ((type & CardType.NonClassCard) == 0)
             {
+                if(currentCards.Contains(Cards.JACK.card) && (type & CardType.Entry) == 0)
+                    return false;
                 if (ClassesManager.Class_War.Value && (type & CardType.Entry) != 0)
                 {
                     foreach (Player p in PlayerManager.instance.players)

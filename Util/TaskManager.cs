@@ -192,7 +192,7 @@ namespace ClassesManagerReborn.Util
 						}catch (Exception ex)
 						{
 							running = false;
-							ClassesManager.Debug(ex.Message, true);
+							ClassesManager.Debug(ex, true);
 						}
                         if (running)
                         {
