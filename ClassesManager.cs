@@ -30,7 +30,7 @@ namespace ClassesManagerReborn
     {
         private const string ModId = "root.classes.manager.reborn";
         private const string ModName = "Classes Manager Reborn";
-        public const string Version = "1.3.0";
+        public const string Version = "1.3.1";
         public const string ModInitials = "CMR";
 
         public static ClassesManager instance { get; private set; }
@@ -45,6 +45,7 @@ namespace ClassesManagerReborn
         internal static bool firstHand = true;
         internal static int cardsToDraw = 0;
         internal MethodBase GetRelativeRarity;
+        internal static AssetBundle assets;
 
         internal System.Collections.IEnumerator InstantiateModClasses()
         {
@@ -123,6 +124,8 @@ namespace ClassesManagerReborn
         void Start()
         {
             instance = this;
+
+            assets = Jotunn.Utils.AssetUtils.LoadAssetBundleFromResources("cmr", typeof(ClassesManager).Assembly);
 
             Unbound.RegisterHandshake(ModId, this.OnHandShakeCompleted);
 

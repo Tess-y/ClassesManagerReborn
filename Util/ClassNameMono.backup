@@ -5,6 +5,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UI.ProceduralImage;
 
 namespace ClassesManagerReborn.Util
 {
@@ -26,13 +27,13 @@ namespace ClassesManagerReborn.Util
         /// </summary>
         public string className = "Class";
         /// <summary>
-        /// The color the top 2 corners of Class cards will be (Black to disable)
+        /// The color the card back of Class cards will be (Black to disable)
         /// </summary>
-        public Color ClassDefult = new Color(53 / 255f, 196 / 255f, 10 / 255f, 1);
+        public Color ClassDefult = new Color(0.2078f, 0.7686f, 0.0392f, 0.16f);
         /// <summary>
-        /// The color the top 2 corners of SubClass cards will be (Black to disable)
+        /// The color the card back of SubClass cards will be (Black to disable)
         /// </summary>
-        public Color SubClassDefult = new Color(0.7f, 0.33f, .05f, 1);
+        public Color SubClassDefult = new Color(0.8679f, 0.5698f, 0f, 0.104f);
         /// <summary>
         /// The color the top 2 corners of the card will be (Black for defualt)
         /// </summary>
@@ -41,7 +42,10 @@ namespace ClassesManagerReborn.Util
         /// The color the Botton 2 corners of the card will be (Black for defualt)
         /// </summary>
         public Color color2 = Color.black;
-        internal bool isOn;
+        /// <summary>
+        /// The color the card back will be (Black for defualt)
+        /// </summary>
+        public Color cardBackColor = Color.black;
         private CardInfo card;
         private void Start()
         {
@@ -66,7 +70,8 @@ namespace ClassesManagerReborn.Util
                 modNameObj.transform.Rotate(0f, 0f, 135f);
                 modNameObj.transform.localScale = new Vector3(1f, 1f, 1f);
                 modNameObj.transform.localPosition = new Vector3(-50f, -50f, 0f);
-            }catch { }
+            }
+            catch(Exception e) { UnityEngine.Debug.LogException(e); }
         }
 
         private void Update()
@@ -76,9 +81,21 @@ namespace ClassesManagerReborn.Util
                 if (ClassesRegistry.Get(card.sourceCard) != null && (ClassesRegistry.Get(card.sourceCard).type & CardType.NonClassCard) == 0)
                 {
                     if ((ClassesRegistry.Get(card.sourceCard).type & CardType.Entry) != 0)
-                        color1 = color2 = ClassDefult;
+                        cardBackColor = ClassDefult;
                     if ((ClassesRegistry.Get(card.sourceCard).type & CardType.SubClass) != 0)
-                        color1 = color2 = SubClassDefult;
+                        cardBackColor = SubClassDefult;
+                }
+                if (cardBackColor != Color.black)
+                {
+                    transform.Find("CardBase(Clone)/Canvas/Back/Back (1)").GetComponent<ProceduralImage>().color = cardBackColor;
+                    transform.Find("CardBase(Clone)/Canvas/Back/SmallBallTop").GetComponent<ProceduralImage>().color = cardBackColor;
+                    transform.Find("CardBase(Clone)/Canvas/Back/SmallBallBot").GetComponent<ProceduralImage>().color = cardBackColor;
+                    //FindObjectsInChildren(transform.Find("CardBase(Clone)/Canvas/Back").gameObject, "SmallBall").ForEach(o => o.GetComponent<ProceduralImage>().color = cardBackColor);
+                    List<GameObject> balls = FindObjectsInChildren(transform.Find("CardBase(Clone)/Canvas/Back").gameObject, "SmallBall");
+                    for (int i = 0; i < balls.Count; i++)
+                    {
+                        if (i % 2 != 0) balls[i].GetComponent<ProceduralImage>().color = cardBackColor;
+                    }
                 }
                 List<GameObject> triangles = FindObjectsInChildren(gameObject, "Triangle");
                 bool up = true;
@@ -88,13 +105,11 @@ namespace ClassesManagerReborn.Util
                     if (++counter > 2) { up = !up; counter = 1; }
                     if (up && color1 != Color.black)
                     {
-                        for(int j = 4; j <=6; j++)
-                            triangles[i].transform.Find($"FRAME ({j})").GetComponent<Image>().color = isOn ? color1 : new Color(color1.r, color1.g, color1.b, color1.a / 6);
+                        triangles[i].GetComponent<Image>().color = color1;
                     }
                     if (!up && color2 != Color.black)
                     {
-                        for (int j = 4; j <= 6; j++)
-                            triangles[i].transform.Find($"FRAME ({j})").GetComponent<Image>().color = isOn ? color2 : new Color(color2.r, color2.g, color2.b, color2.a / 6);
+                        triangles[i].GetComponent<Image>().color = color2;
                     }
                 }
             }

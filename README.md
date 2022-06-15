@@ -3,3 +3,5 @@ Inspired by FluxxField's original [Classes Manager](https://github.com/FluxxFiel
 
 ***
 This mod is still under development and while it's core features exist not all planed features have been added. If you have any requests for features that would aid in the creation of Classes and class like things, please reach out to @『 root 』#9063 on Discord.
+
+Class indicator system is being overhalled and is subject to change multiple times
