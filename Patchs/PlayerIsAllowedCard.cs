@@ -14,6 +14,11 @@ namespace ClassesManagerReborn.Patchs
         {
             if (!__result) return;
             if (player == null || card == null) return;
+            if (ClassesManager.Force_Class.Value && !player.data.currentCards.Intersect(ClassesRegistry.GetClassInfos(CardType.Entry)).Any() && !ClassesRegistry.GetClassInfos(CardType.Entry).Contains(card))
+            {
+                __result = false;
+                return;
+            }
             if (card == Cards.JACK.card || card == Cards.MasteringTrade.card)
                 if (ClassesRegistry.GetClassObjects(~CardType.Entry).Count == 0)
                     __result = false;

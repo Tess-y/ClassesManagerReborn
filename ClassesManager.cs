@@ -20,7 +20,6 @@ namespace ClassesManagerReborn
     [BepInDependency("com.willis.rounds.unbound", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.moddingutils", BepInDependency.DependencyFlags.HardDependency)]
     [BepInDependency("pykess.rounds.plugins.cardchoicespawnuniquecardpatch", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInDependency("pykess.rounds.plugins.deckcustomization", BepInDependency.DependencyFlags.HardDependency)]
     [BepInIncompatibility("fluxxfield.rounds.plugins.classesmanager")]
     // Declares our Mod to Bepin
     [BepInPlugin(ModId, ModName, Version)]
@@ -30,7 +29,7 @@ namespace ClassesManagerReborn
     {
         private const string ModId = "root.classes.manager.reborn";
         private const string ModName = "Classes Manager Reborn";
-        public const string Version = "1.3.1";
+        public const string Version = "1.4.1";
         public const string ModInitials = "CMR";
 
         public static ClassesManager instance { get; private set; }
@@ -44,7 +43,6 @@ namespace ClassesManagerReborn
 
         internal static bool firstHand = true;
         internal static int cardsToDraw = 0;
-        internal MethodBase GetRelativeRarity;
         internal static AssetBundle assets;
 
         internal System.Collections.IEnumerator InstantiateModClasses()
@@ -99,20 +97,6 @@ namespace ClassesManagerReborn
             var harmony = new Harmony(ModId);
             harmony.PatchAll();
 
-            //// Patch Deck Customization
-            GetRelativeRarity = typeof(DeckCustomization.DeckCustomization).Assembly.GetType("DeckCustomization.RarityUtils").GetMethod("GetRelativeRarity", BindingFlags.NonPublic | BindingFlags.Static, null, new Type[] { typeof(CardInfo) },null);
-            HarmonyMethod GetRelativeRarity_Postfix = new HarmonyMethod(typeof(Patchs.GetRelativeRarity).GetMethod(nameof(Patchs.GetRelativeRarity.PostfixMthod)));
-            harmony.Patch(GetRelativeRarity, postfix: GetRelativeRarity_Postfix);
-
-            MethodBase GetRarityAsPerc = typeof(DeckCustomization.DeckCustomization).Assembly.GetType("DeckCustomization.RarityUtils").GetMethod("GetRarityAsPerc", BindingFlags.NonPublic | BindingFlags.Static, null, new Type[] { typeof(CardInfo) }, null);
-            HarmonyMethod GetRarityAsPerc_Postfix = new HarmonyMethod(typeof(Patchs.GetRarityAsPerc).GetMethod(nameof(Patchs.GetRarityAsPerc.PostfixMthod)));
-            harmony.Patch(GetRarityAsPerc, postfix: GetRarityAsPerc_Postfix);
-
-            MethodBase EfficientGetRandomCard = typeof(DeckCustomization.DeckCustomization).Assembly.GetType("DeckCustomization.GetRandomCard").GetMethod("Efficient", BindingFlags.NonPublic | BindingFlags.Static);
-            HarmonyMethod EfficientGetRandomCard_Prefix = new HarmonyMethod(typeof(Patchs.EfficientGetRandomCard).GetMethod(nameof(Patchs.EfficientGetRandomCard.PrefixMthod)));
-            harmony.Patch(EfficientGetRandomCard, prefix: EfficientGetRandomCard_Prefix);
-            //// END patch
-
 
             Force_Class = base.Config.Bind<bool>(ModId, "Force_Class", false, "Enable Force Classes");
             Ignore_Blacklist = base.Config.Bind<bool>(ModId, "Ignore_Blacklist", false, "Allow more then one class per player");
@@ -138,6 +122,7 @@ namespace ClassesManagerReborn
             GameModeManager.AddHook(GameModeHooks.HookGameStart, OnGameStart);
             GameModeManager.AddHook(GameModeHooks.HookPlayerPickEnd, CleanupClasses);
             GameModeManager.AddHook(GameModeHooks.HookPickEnd, CleanupClasses);
+            GameModeManager.AddHook(GameModeHooks.HookGameStart, Patchs.AjustRarities.gameStart);
 
             CustomCard.BuildCard<Cards.JACK>(card => Cards.JACK.card = card);
             CustomCard.BuildCard<Cards.MasteringTrade>(card => Cards.MasteringTrade.card = card);
