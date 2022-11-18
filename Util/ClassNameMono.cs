@@ -42,6 +42,7 @@ namespace ClassesManagerReborn.Util
         /// </summary>
         public Color color2 = Color.black;
         internal bool isOn;
+        internal bool lastOn;
         private CardInfo card;
         private void Start()
         {
@@ -66,11 +67,13 @@ namespace ClassesManagerReborn.Util
                 modNameObj.transform.Rotate(0f, 0f, 135f);
                 modNameObj.transform.localScale = new Vector3(1f, 1f, 1f);
                 modNameObj.transform.localPosition = new Vector3(-50f, -50f, 0f);
+                lastOn = !isOn;
             }catch { }
         }
 
         private void Update()
         {
+            if(lastOn != isOn)
             try
             {
                 if (ClassesRegistry.Get(card.sourceCard) != null && (ClassesRegistry.Get(card.sourceCard).type & CardType.NonClassCard) == 0)
@@ -97,8 +100,9 @@ namespace ClassesManagerReborn.Util
                             triangles[i].transform.Find($"FRAME ({j})").GetComponent<Image>().color = isOn ? color2 : new Color(color2.r, color2.g, color2.b, color2.a / 6);
                     }
                 }
+                lastOn = isOn;
             }
-            catch { }
+            catch { this.enabled = false; }
         }
 
         public static List<GameObject> FindObjectsInChildren(GameObject gameObject, string gameObjectName)
