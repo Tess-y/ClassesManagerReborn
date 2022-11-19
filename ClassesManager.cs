@@ -29,7 +29,7 @@ namespace ClassesManagerReborn
     {
         private const string ModId = "root.classes.manager.reborn";
         private const string ModName = "Classes Manager Reborn";
-        public const string Version = "1.4.2";
+        public const string Version = "1.4.3";
         public const string ModInitials = "CMR";
 
         public static ClassesManager instance { get; private set; }
@@ -47,6 +47,7 @@ namespace ClassesManagerReborn
 
         internal System.Collections.IEnumerator InstantiateModClasses()
         {
+            for (int _ = 0; _ < 5; _++) yield return null;
             List<Task> tasks = new List<Task>();
             PluginInfo[] pluginInfos = BepInEx.Bootstrap.Chainloader.PluginInfos.Values.Where(pi => pi.Dependencies.Any(d => d.DependencyGUID == ModId)).ToArray();
             List<ClassHandler> handlers = new List<ClassHandler>();
