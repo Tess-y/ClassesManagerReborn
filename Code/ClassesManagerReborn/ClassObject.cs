@@ -143,12 +143,13 @@ namespace ClassesManagerReborn
             return false;
         }
 
-        internal CardInfo? GetMissingClass(Player player)
+      
+        internal CardInfo GetMissingClass(Player player)
         {
             return GetMissingClass(player.data.currentCards.ToList());
         }
 
-        internal CardInfo? GetMissingClass(List<CardInfo> cards)
+        internal CardInfo GetMissingClass(List<CardInfo> cards)
         {
 
             List<CardInfo> cardInfos = new List<CardInfo>();
